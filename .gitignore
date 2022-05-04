@@ -48,3 +48,5 @@ Thumbs.db
 *.mov
 *.wmv
 
+# Jupyter Lab files
+.ipynb_checkpoints
