@@ -1,8 +1,8 @@
 import xarray as xr
 import numpy as np
 
-class seaice_conc_monthly:
-    """This class captures the processing you might want to do on a seaice concentration dataset.
+class sea_ice_conc_monthly:
+    """This class captures the processing you might want to do on a sea ice concentration dataset.
     
     functions:
     calc_extent: calculates sea ice extent and average and std (by month) of sea ice extent
@@ -91,6 +91,9 @@ class seaice_conc_monthly:
         
         """
         
+        #There is no validation on the inputs here, (the input formats are not strictly defined).
+        if type(conc_da)!=xr.core.dataarray.DataArray:
+            raise Error("First argument is not dataarray")
 
 
         self.da=conc_da.where(
