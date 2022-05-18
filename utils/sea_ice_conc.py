@@ -1,7 +1,7 @@
 import xarray as xr
 import numpy as np
 
-class sea_ice_conc_monthly:
+class sea_ice_conc:
     """This class captures the processing you might want to do on a sea ice concentration dataset.
     
     functions:
@@ -71,6 +71,22 @@ class sea_ice_conc_monthly:
 
         #and gridded anoms
         self.anoms_da=self.da.groupby('time.month')-self.conc_climat_ds.ave
+        
+    def daily_min_max(self):
+        self.extent_da
+        
+        extent_5day_rolling_da=self.extent_da.rolling(time=5, center=True).mean()
+
+        yearly_min_da=extent_5day_rolling_da.groupby('time.year').apply(xr.DataArray.idxmin).dt.dayofyear
+        yearly_max_da=extent_5day_rolling_da.groupby('time.year').apply(xr.DataArray.idxmax).dt.dayofyear
+
+        min_max_ds=xr.Dataset()
+        
+        min_max_ds.min = self._climatology(yearly_min_da)
+        
+        min_max_ds.max = self._climatology(yearly_max_da)
+        
+        return min_max_ds, yearly_min_ds, yearly_max_ds
 
     def __init__(
         self, 
@@ -93,7 +109,7 @@ class sea_ice_conc_monthly:
         
         #There is no validation on the inputs here, (the input formats are not strictly defined).
         if type(conc_da)!=xr.core.dataarray.DataArray:
-            raise Error("First argument is not dataarray")
+            raise ValueError("First argument is not dataarray")
 
 
         self.da=conc_da.where(
