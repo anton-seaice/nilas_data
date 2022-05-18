@@ -78,7 +78,7 @@ class sea_ice_conc:
         extent_5day_rolling_da=self.extent_da.rolling(time=5, center=True).mean()
 
         yearly_min_da=extent_5day_rolling_da.groupby('time.year').apply(xr.DataArray.idxmin).dt.dayofyear
-        yearly_max_da=extent_5day_rolling_da.rolling(time=5).mean().groupby('time.year').apply(xr.DataArray.idxmax).dt.dayofyear
+        yearly_max_da=extent_5day_rolling_da.groupby('time.year').apply(xr.DataArray.idxmax).dt.dayofyear
 
         min_max_ds=xr.Dataset()
         
