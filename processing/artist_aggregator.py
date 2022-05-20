@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import xarray as xr
 import argparse
@@ -7,6 +7,7 @@ import glob
 import sys
 import os
 import pandas as pd
+import numpy as np
 import rioxarray
 import pdb
 from tqdm.auto import tqdm
@@ -45,7 +46,7 @@ file_list = []
 
 # create list of paths
 print("Finding files")
-for file in Path(path).rglob('*'):
+for file in Path(path).rglob('*202*'):
     file_list.append(file)
 
 file_list = sorted(file_list, key=lambda i: int(os.path.splitext(os.path.basename(i)[16:24])[0]))
@@ -57,16 +58,24 @@ print(f"Processing {len(file_list)} files")
 time_var = xr.Variable('time', paths_to_datetimeindex(file_list,
                                                       string_slice=(16,24), form='%Y%m%d'))
 
-# Load in and concatenate all individual GeoTIFFs
-da = xr.concat([xr.open_rasterio(i) for i in tqdm(file_list)],
+# Load in and concatenate individual data
+# decode_coords all reads the polar_stereographic projection as a coordinate
+ds = xr.concat([xr.open_dataset(i) for i in tqdm(file_list)],
                         dim=time_var)
 
-# Covert our xarray.DataArray into a xarray.Dataset
-#ds = da.to_dataset('band')
+### GEOTIFF
 
+# Covert our xarray.DataArray into a xarray.Dataset
+# ds = ds.to_dataset('band')
+# ds = ds.rename({1: 'conc'})
+
+# NETCDF
+
+ds = ds.drop('polar_stereographic')
 # Rename the variable to a more useful name
-#ds = ds.rename({1: 'conc'})
+ds = ds.rename({'z': 'conc'})
 
 # Writeout the output
 print("Writing data")
-da.to_netcdf(path=args['dest'])
+ds = ds.astype(np.float16)
+ds.to_netcdf(path=args['dest'])
