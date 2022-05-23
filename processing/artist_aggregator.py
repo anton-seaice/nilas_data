@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# Example: time python3 artist_aggregator.py --src /g/data/jk72/MIZ/Bremen/netcdf/ --dest /g/data/jk72/MIZ/processed/
 
 import xarray as xr
 import argparse
@@ -8,7 +9,7 @@ import sys
 import os
 import pandas as pd
 import numpy as np
-import rioxarray
+# import rioxarray
 import pdb
 from tqdm.auto import tqdm
 
@@ -46,7 +47,7 @@ file_list = []
 
 # create list of paths
 print("Finding files")
-for file in Path(path).rglob('*202*'):
+for file in Path(path).rglob('*'):
     file_list.append(file)
 
 file_list = sorted(file_list, key=lambda i: int(os.path.splitext(os.path.basename(i)[16:24])[0]))
@@ -75,7 +76,11 @@ ds = ds.drop('polar_stereographic')
 # Rename the variable to a more useful name
 ds = ds.rename({'z': 'conc'})
 
+# create monthly data
+print("Monthly resampling")
+monthly_resample = ds.resample(time="M").mean(keep_attrs=True)
+
 # Writeout the output
 print("Writing data")
-ds = ds.astype(np.float16)
-ds.to_netcdf(path=args['dest'])
+ds.to_netcdf(path=args['dest']+'asi2_daily.nc')
+monthly_resample.to_netcdf(path=args['dest']+'asi2_monthly.nc')
