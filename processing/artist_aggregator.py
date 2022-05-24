@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 # Example: time python3 artist_aggregator.py --src /g/data/jk72/MIZ/Bremen/netcdf/ --dest /g/data/jk72/MIZ/processed/
+# qsub -I -q normal -P jk72 -l walltime=05:00:00,ncpus=48,mem=128gb,storage=gdata/v10+gdata/jk72,wd
 
 import xarray as xr
 import argparse
