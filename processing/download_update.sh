@@ -11,7 +11,7 @@
 #Note that this bash script using the PBS copy queue. For transferring files from the internet. If we want to run processing subsequently well need a different job in the normal queue.
 
 DATE=$(date +%y%m%d)
-NEW_DATE=$(date +%y%m%d -d "$DATE + 1 day")0000
+NEW_DATE=$(date +%y%m%d -d "$DATE + 3 day")0000
 
 echo "Restarting job on $NEW_DATE"
 
