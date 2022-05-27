@@ -45,7 +45,7 @@ class sea_ice_conc:
         #calculate sea ice extent
         self.extent_da=(
             self._has_seaice_da*self.grid_areas
-        ).sum(['y','x'])
+        ).sum(self._dims_not_time)
 
         #fill the times there is no data in with nans again (rather than 0s)
         self.extent_da[self._all_nans_da]=np.nan
@@ -58,7 +58,7 @@ class sea_ice_conc:
         self.area_da=(
             self.da.where(self._has_seaice_da) #select areas when conc is greater than 15%
             *self.grid_areas
-        ).sum(['y','x'])
+        ).sum(self._dims_not_time)
 
         #fill the times there is no data in with nans again (rather than 0s)
         self.area_da[self._all_nans_da]=np.nan
@@ -116,10 +116,15 @@ class sea_ice_conc:
             (conc_da<=conc_range[1]) #less than one to exclude flagged values 
             #TO-DO remove call to global var here??
         )
+        
         self.grid_areas=grid_areas
         self.climat_dates=climat_dates
         
+        dims_set=set(self.da.dims)
+        dims_set.remove('time')
+        self._dims_not_time=list(dims_set)
+        
         self._has_seaice_da=(self.da>=conc_range[0]) #sea ice conc more than 15% is included
 
-        self._all_nans_da=(self._has_seaice_da.sum(['y','x'])==0) #times where there is no data
+        self._all_nans_da=(self._has_seaice_da.sum(self._dims_not_time)==0) #times where there is no data
         
