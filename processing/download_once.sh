@@ -10,7 +10,6 @@ umask 0003
 # NSIDC CDR Historical Data
 wget --ftp-user=anonymous -r -cN -nd ftp://sidads.colorado.edu/DATASETS/NOAA/G02202_V4/south/aggregate/ -P /g/data/jk72/MIZ/NSIDC/G02202_V4/
 
-
 # NSIDC Supporting Info (area of pixels)
 wget --ftp-user=anonymous -r -cN -nd ftp://sidads.colorado.edu/DATASETS/seaice/polar-stereo/tools/pss25area_v3.dat -P /g/data/jk72/MIZ/NSIDC/
 
@@ -23,4 +22,6 @@ do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/d
 done;
 done
 
+#OCCCI Ocean Colour
+wget -r -cN -nd --user oc-cci-data --password ELaiWai8ae ftp://ftp.rsg.pml.ac.uk/occci-v5.0/geographic/netcdf/monthly/chlor_a/ -P /g/data/jk72/MIZ/OCCCI
 
