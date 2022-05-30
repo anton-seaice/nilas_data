@@ -114,7 +114,6 @@ class sea_ice_conc:
 
         self.da=conc_da.where(
             (conc_da<=conc_range[1]) #less than one to exclude flagged values 
-            #TO-DO remove call to global var here??
         )
         
         self.grid_areas=grid_areas
