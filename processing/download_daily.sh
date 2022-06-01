@@ -22,3 +22,6 @@ do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/d
 done; 
 done
 
+#OCCCI Ocean Colour
+wget -r -cN -nd --user oc-cci-data --password ELaiWai8ae ftp://ftp.rsg.pml.ac.uk/occci-v5.0/geographic/netcdf/monthly/chlor_a/ -P /g/data/jk72/MIZ/OCCCI
+
