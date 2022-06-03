@@ -15,7 +15,7 @@ NEW_DATE=$(date +%y%m%d -d "$DATE + 3 day")0000
 
 echo "Restarting job on $NEW_DATE"
 
-qsub -a $NEW_DATE /g/data/jk72/as2285/miz/processing/download_update.sh 
+qsub -a $NEW_DATE /g/data/jk72/as2285/miz/processing/pbs_download.sh 
 sleep 30
 qstat
 
