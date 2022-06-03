@@ -1,6 +1,12 @@
 import xarray as xr
 import numpy as np
 
+#_work_dir='/g/data/jk72/as2285/miz/'
+#import sys
+#sys.path.append(_work_dir)
+
+from utils.climat import climatology
+
 class sea_ice_conc:
     """This class captures the processing you might want to do on a sea ice concentration dataset.
     
@@ -24,20 +30,8 @@ class sea_ice_conc:
         
         """
         
-        climat_ds=xr.Dataset()
-        
-        climat_ds['ave']=da.where(
-            (da.time.dt.year>=self.climat_dates[0])
-            *(da.time.dt.year<=self.climat_dates[1]), 
-            drop=True
-        ).groupby('time.month').mean()
-
-        climat_ds['st_dev']=da.where(
-            (da.time.dt.year>=self.climat_dates[0])
-            *(da.time.dt.year<=self.climat_dates[1]), 
-            drop=True
-        ).groupby('time.month').std()
-        
+        climat_ds=climatology(da, climat_dates=self.climat_dates)
+               
         return climat_ds
     
     def calc_extent(self):
@@ -71,6 +65,10 @@ class sea_ice_conc:
 
         #and gridded anoms
         self.anoms_da=self.da.groupby('time.month')-self.conc_climat_ds.ave
+        
+        self.anoms_da=self.anoms_da.where(
+            ((self.da==0)*(self.anoms_da==0))==0
+        ) #mask out cells with no concentration at all
         
     def daily_min_max(self):
         self.extent_da

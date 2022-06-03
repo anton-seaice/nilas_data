@@ -9,14 +9,7 @@ class sea_ice_duration:
     functions:
     calc_duration: calculates sea ice advance / retreat / duration for each year
     calc_climat: calculates mean and std of sea ice advance / retreat / duration
-    
-    results:
-    .adv_day_ds
-    .ret_day_ds - a gridded dataset with the day of retreate as a day, and the index of the day (relative to Feb 15)
-    .duration_da - gridded length of sea ice season
-    .adv_climat_ds - gridded mean and std of advance day
-    .ret_climat_da - gridded mean and std of retreat day
-    .dur_climat_ds - gridded mean and std of duration
+    calc_anoms: calculates anomaly in sea ice advance / retreat / duration
     
 
         """
@@ -24,7 +17,9 @@ class sea_ice_duration:
     def _year_bins(self):
         # Define groups starting ending in mid-feb each year
         """
-        Following [18], after [5] and [26], annual maps of patterns of ice advance and duration were derived by flagging the timings of the advance and retreat of the ice edge within an annual search window that begins and ends during mean summer (mid-February) minimum ice extent (i.e., year day 46 to 410, or 411 in leap years). Within this period, annual day of advance is the time when the ice concentration in a given pixel first exceeds 15% (taken to approximate the ice edge) for at least 5 days, while day of retreat is the time when concentration remains below 15% until the end of the given sea ice year. Ice season duration is then the period between day of advance and retreat. For regions where ice remains (survives the summer melt), day of advance and retreat are set to the lower and upper limits, respectively i.e., year day 46 and 410/11. Isolated days of missing data were interpolated from adjoining days. Larger gaps during December 1987 through mid January 1988 were filled with the 1979–2009 climatology. https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0064756
+        Following [18], after [5] and [26], annual maps of patterns of ice advance and duration were derived by flagging the timings of the advance and retreat of the ice edge within an annual search window that begins and ends during mean summer (mid-February) minimum ice extent (i.e., year day 46 to 410, or 411 in leap years). Within this period, annual day of advance is the time when the ice concentration in a given pixel first exceeds 15% (taken to approximate the ice edge) for at least 5 days, while day of retreat is the time when concentration remains below 15% until the end of the given sea ice year. Ice season duration is then the period between day of advance and retreat. For regions where ice remains (survives the summer melt), day of advance and retreat are set to the lower and upper limits, respectively i.e., year day 46 and 410/11. Isolated days of missing data were interpolated from adjoining days. Larger gaps during December 1987 through mid January 1988 were filled with the 1979–2009 climatology. 
+        
+        https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0064756
             """
         # year of the first entry in the dataset
         first_year=self.da.time[0].dt.year.values
@@ -97,6 +92,13 @@ class sea_ice_duration:
 
 
     def calc_duration(self):
+        """
+        results:
+    .adv_day_ds
+    .ret_day_ds - a gridded dataset with the day of retreate as a day, and the index of the day (relative to Feb 15)
+    .duration_da - gridded length of sea ice season
+    """
+        
         
         self._year_bins()
         
@@ -119,13 +121,34 @@ class sea_ice_duration:
         return result_ds
 
     def calc_climat(self):
-        
+        """
+        results:
+        .adv_climat_ds - gridded mean and std of advance day
+        .ret_climat_da - gridded mean and std of retreat day
+        .dur_climat_ds - gridded mean and std of duration
+        """
+
         # calculate mean and std for each annual day of advance and retreat and the annual duration
         self.adv_climat_ds=self._mean_st_dev(self.adv_day_ds.index)
         self.ret_climat_ds=self._mean_st_dev(self.ret_day_ds.index)
         self.dur_climat_ds=self._mean_st_dev(self.duration_da)
         
-    
+        
+    def calc_anoms(self):
+        """
+        results:
+        .adv_anom_da - gridded anom in annual advance day
+        .ret_anom_da - gridded anom in annual retreat day
+        .dur_anom_da - gridded anom in annual duration
+        """
+        self.calc_climat()
+        
+        #calculate anoms for each year
+        self.adv_anom_da=self.adv_day_ds.index-self.adv_climat_ds.ave
+        self.ret_anom_da=self.ret_day_ds.index-self.ret_climat_ds.ave
+        self.dur_anom_da=self.duration_da-self.dur_climat_ds.ave
+        
+        
     def __init__(
         self,
         conc_da,
@@ -140,12 +163,8 @@ class sea_ice_duration:
             (any datetime format accepted by xarray)
         conc_range : range of valid concentrations in the input data set (default 0.15 to 1)
         """
-        
         self.da=conc_da.where(
             (conc_da<=conc_range[1]) #less than one to exclude flagged values 
         )
-        
         self.climat_dates=climat_dates
-       
         self.conc_range=conc_range
-    
