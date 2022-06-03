@@ -25,3 +25,6 @@ done
 #OCCCI Ocean Colour
 wget -r -cN -nd --user oc-cci-data --password ELaiWai8ae ftp://ftp.rsg.pml.ac.uk/occci-v5.0/geographic/netcdf/monthly/chlor_a/ -P /g/data/jk72/MIZ/OCCCI
 
+#OSI-SAF sea ice drift
+wget -A "*sh*.nc" -r -cN -nd --user anonymous ftp://osisaf.met.no/archive/ice/drift_lr/merged -P /g/data/jk72/MIZ/OSI-SAF/drift_lr/
+
