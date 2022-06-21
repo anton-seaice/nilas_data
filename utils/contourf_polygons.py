@@ -71,14 +71,14 @@ def contourf_polygons(to_plot_da, levels, desired_crs_str="epsg:4326"):
     #function to transform from the source south polar stereo to the lat/lon for ipyleaflet
     desired_crs=odc.geo.crs.CRS(desired_crs_str)
     try:
-        source_crs=to_plot_da.odc.crs#odc.geo.crs.CRS("epsg:3976")
+        source_crs=to_plot_da.odc.crs  #typically odc.geo.crs.CRS("epsg:3976") for spstere
         f=source_crs.transformer_to_crs(other=desired_crs)
     except:
         raise AssertionError("expected xr to have crs specified, use xr.odc.assign_crs()")
 
     #convert the cs format to shapely polygon format
 
-    df = pd.DataFrame() #somewhere to park the output
+    df_ls = list() #of pd.DataFrame() #somewhere to park the output
 
     #for each level in the filled contours
     for iLevel in range(len(cs.allsegs)): #this is the output coordinates from contourf, as as a list of shapes for each level
@@ -93,8 +93,8 @@ def contourf_polygons(to_plot_da, levels, desired_crs_str="epsg:4326"):
             if len(p)>2: #check this is a an actual polygon
                 locations.append(Polygon([f(i[0],i[1]) for i in p]))
 
-        df=df.append(pd.DataFrame({'level': cs.levels[iLevel], 'polygon': locations}))
+        df_ls.append(pd.DataFrame({'level': cs.levels[iLevel], 'polygon': locations}))
 
-    gdf=GeoDataFrame(df, geometry='polygon', crs=desired_crs)
+    gdf=GeoDataFrame(pd.concat(df_ls), geometry='polygon', crs=desired_crs)
 
     return gdf
