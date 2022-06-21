@@ -15,3 +15,13 @@ This folder contains python and bash scripts for downloading and aggregating dat
 ## Utils
 
 This folder contains python modules, functions and classes that can be used to calculate and visualise products
+
+# Installation
+
+All python dependencies to use this code in jupyterlab are in ENV.yaml. It's faster to use the mamba package manager, although conda should also work:
+
+>mamba create env -n sea-ice-tracker --file ENV.yml
+
+To update:
+
+>mamba env update --file ENV.yml --prune

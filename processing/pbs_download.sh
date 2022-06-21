@@ -20,5 +20,8 @@ sleep 30
 qstat
 
 # do the work
-/g/data/jk72/as2285/miz/processing/download_daily.sh
+source /g/data/jk72/as2285/miz/processing/download_daily.sh
 
+# create monthly aggregated data 
+
+qsub /g/data/jk72/as2285/miz/processing/pbs_run_aggregators.sh
