@@ -24,4 +24,4 @@ All python dependencies to use this code in jupyterlab are in ENV.yaml. It's fas
 
 To update:
 
->mamba env update --prefix sea-ice-tracker --file ENV.yml --prune
+>mamba env update -n sea-ice-tracker --file ENV.yml --prune
