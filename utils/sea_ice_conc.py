@@ -64,10 +64,13 @@ class sea_ice_conc:
         self.conc_climat_ds=self._climatology(self.da) 
 
         #and gridded anoms
-        self.anoms_da=self.da.groupby('time.month')-self.conc_climat_ds.ave
+        # there is no requirement for the input data to be monthly, but calculating daily anoms are not going to be very useful, so make this whole result monthly (using resample)
+        self.monthly_da=self.da.resample(time='M').mean('time')
+        
+        self.anoms_da=self.monthly_da.groupby('time.month')-self.conc_climat_ds.ave
         
         self.anoms_da=self.anoms_da.where(
-            ((self.da==0)*(self.anoms_da==0))==0
+            ((self.monthly_da==0)*(self.anoms_da==0))==0
         ) #mask out cells with no concentration at all
         
     def daily_min_max(self):
