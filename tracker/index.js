@@ -6,12 +6,6 @@ function init() {
 		[-41.44603897171838, 135.0]
 	]);
 	
-	function localUrl(basePath,time) {
-		const d = new Date(time);
-		const year = String(d.getFullYear());
-		const month = String(d.getMonth() +1) ; //zero indexed
-		return basePath+year+'_'+month+'.svg' ;
-	}
 		
 	
 	function genTimeLayer(el) {
@@ -19,17 +13,14 @@ function init() {
 		// el is an "event listener" on the date field
 		time = el.target.value ;
 		console.log(time) ;
-		imageUrl = localUrl(
-			'data/sea_ice_conc_anoms/nsidc_sea_ice_conc_anoms_',
-			time 
-			);
-		timeLayer.setUrl(imageUrl) ;
+		timeLayer.setTime(time) ;
 		
 		baseMap.options.time=time ;
 		baseMap.redraw() ;
-				
+		
 		return true ;
-	};
+	} ;
+	
 
 	// Get a reference to the <input type="date">
 	var dateEl = document.querySelector('#date');
@@ -40,15 +31,17 @@ function init() {
 	dateEl.value = myDate.toISOString().substr(0, 10) ;
 	
 	//initial image layer	
-	var imageUrl = localUrl(
-			'data/sea_ice_conc_anoms/nsidc_sea_ice_conc_anoms_',
-			dateEl.value
-			);
-	var timeLayer = L.imageOverlay(imageUrl, latLngBounds, {
-			opacity: 0.7,
-		}) ;
 	
-	// initisl basemap 
+	var timeLayer = L.imageOverlay.timeLocal(
+		dateEl.value,
+		'../data/sea_ice_conc_anoms/nsidc_sea_ice_conc_anoms_',
+		'.svg',
+		latLngBounds, 
+		{'opacity': 0.7}
+	) ;
+		
+	
+	// initial basemap 
 	var baseMap = L.tileLayer("http://map1{s}.vis.earthdata.nasa.gov/wmts-antarctic/{layer}/default/{time}/{tileMatrixSet}/{z}/{y}/{x}.jpg", {
 		layer: "MODIS_Aqua_CorrectedReflectance_TrueColor",
 		tileMatrixSet: "EPSG3031_250m",
@@ -74,7 +67,7 @@ function init() {
 	});
 	
 	//ship track
-	shiptrack = fetch('data/miz_stations.geojson', {
+	shiptrack = fetch('../data/miz_stations.geojson', {
 		mode:'no-cors' //this is problematic. Probably the file needs to he accessed through http I think and is probably why this doesnt work
 	})
 		.then(response => response.json())
@@ -97,7 +90,6 @@ function init() {
 		continuousWorld: true, // continuousWorld because polar crosses dateline
 		worldCopyJump: false,
 		layers: [
-			baseMap,
 			coastlines,
 			//shiptrack,
 			timeLayer
