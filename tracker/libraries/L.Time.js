@@ -5,24 +5,29 @@ aka L.ImageOverlay.TimeLocal
 
 Uses to load a single image from local storage based on the specified time
 
+Options are unchanged from L.ImageOverlay
+
 */
 
 L.ImageOverlay.TimeLocal=L.ImageOverlay.extend({
 	
 	
-	initialize: function (time, fileBasePath, fileExtension, bounds, options) { // (String (dd-mm-yyyy) , String, String, LatLngBounds, Object)
+	initialize: function (time, fileBasePath, fileExtension, bounds, options ) { // (String (dd-mm-yyyy) , String, String, LatLngBounds, Object)
 		this._basePath=String(fileBasePath) ;
 		this._fileExtension=String(fileExtension) ;
 		this._time = String(time) ;
 		
+		//construct a url from the arguments
+		let url = this._localUrl() ;
+		
+		// run the initialize function from the super class
 		L.ImageOverlay.prototype.initialize.call(
-			this, this._localUrl(), bounds, options
+			this, url , bounds, options
 			) ;
-		
-		
 	},
 	
-	setTime: function(time) {
+	updateTime: function(time) {
+		//change and redraw for the new time
 		this._time = time ;
 		this.setUrl(this._localUrl()) ;
 	},

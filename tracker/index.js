@@ -13,7 +13,8 @@ function init() {
 		// el is an "event listener" on the date field
 		time = el.target.value ;
 		console.log(time) ;
-		timeLayer.setTime(time) ;
+		concLayer.updateTime(time) ;
+		concAnomLayer.updateTime(time) ;
 		
 		baseMap.options.time=time ;
 		baseMap.redraw() ;
@@ -32,12 +33,20 @@ function init() {
 	
 	//initial image layer	
 	
-	var timeLayer = L.imageOverlay.timeLocal(
+	var concAnomLayer = L.imageOverlay.timeLocal(
 		dateEl.value,
 		'../data/sea_ice_conc_anoms/nsidc_sea_ice_conc_anoms_',
 		'.svg',
 		latLngBounds, 
-		{'opacity': 0.7}
+		{'opacity': 0.5}
+	) ;
+	
+	var concLayer = L.imageOverlay.timeLocal(
+		dateEl.value,
+		'../data/sea_ice_conc/nsidc_sea_ice_conc_',
+		'.png',
+		latLngBounds, 
+		{'opacity': 1}
 	) ;
 		
 	
@@ -89,26 +98,26 @@ function init() {
 	var map = L.map('map', {
 		continuousWorld: true, // continuousWorld because polar crosses dateline
 		worldCopyJump: false,
-		layers: [
-			coastlines,
-			//shiptrack,
-			timeLayer
-		],
+		layers: [ coastlines, concLayer ],
 		center: [-90, 0],
 		zoom: 0,
 		crs: crs,
 		maxZoom: 4
 	});
 	//map.fitBounds(latLngBounds); This line gives weird results, for unclear reasons.
-	map.addControl(new L.Control.Fullscreen({pseudoFullscreen: true}));
+	
+	// Add fullscreen button
+	map.addControl(
+		L.control.fullscreen({pseudoFullscreen: true})
+	);
 	
 	// Add layer control
-	baseLayers= null
 	overlays = {
 		'MODIS Imagery (Daily)':baseMap ,
-		'Sea Ice Conc Anoms (Monthly)':timeLayer ,
+		'Sea Ice Conc (Monthly)': concLayer, 
+		'Sea Ice Conc Anoms (Monthly)':concAnomLayer ,
 	} ;
-	var layerControl=L.control.layers(baseLayers,overlays).addTo(map) ;
+	var layerControl=L.control.layers(null,overlays).addTo(map) ;
 
 	
 	// Module which adds graticule (lat/lng lines)
