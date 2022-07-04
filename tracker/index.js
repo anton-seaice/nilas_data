@@ -24,16 +24,13 @@ function init() {
 	
 
 	// Get a reference to the <input type="date">
-	var dateEl = document.querySelector('#date');
+	//var dateEl = document.querySelector('#date');
 
-	// Set the current <input type="date"> and generate the initial layers
-	let myDate = new Date() ;
-	myDate.setTime(myDate.getTime()-5*60*60*24*1000) ;
-	dateEl.value = myDate.toISOString().substr(0, 10) ;
+	
 	
 	//initial image layer	
 	
-	var concAnomLayer = L.imageOverlay.timeLocal(
+	/*var concAnomLayer = L.imageOverlay.timeLocal(
 		dateEl.value,
 		'../data/sea_ice_conc_anoms/nsidc_sea_ice_conc_anoms_',
 		'.svg',
@@ -66,7 +63,7 @@ function init() {
 	// On date change generate a new layer of the current date and remove the old layer
 	dateEl.addEventListener('change', genTimeLayer ) ;
 
-	
+	*/
 	//coastlines
 	const coastlines = L.tileLayer.wms('http://geos.polarview.aq/geoserver/wms', {
 		layers:'polarview:coastS10',
@@ -98,7 +95,8 @@ function init() {
 	var map = L.map('map', {
 		continuousWorld: true, // continuousWorld because polar crosses dateline
 		worldCopyJump: false,
-		layers: [ coastlines, concLayer ],
+		layers: [ coastlines//, concLayer
+		],
 		center: [-90, 0],
 		zoom: 0,
 		crs: crs,
@@ -106,18 +104,18 @@ function init() {
 	});
 	//map.fitBounds(latLngBounds); This line gives weird results, for unclear reasons.
 	
+	L.control.date().addTo(map) ;
+	
 	// Add fullscreen button
-	map.addControl(
-		L.control.fullscreen({pseudoFullscreen: true})
-	);
+	L.control.fullscreen({pseudoFullscreen: true}).addTo(map) ;
 	
 	// Add layer control
-	overlays = {
+/*	overlays = {
 		'MODIS Imagery (Daily)':baseMap ,
 		'Sea Ice Conc (Monthly)': concLayer, 
 		'Sea Ice Conc Anoms (Monthly)':concAnomLayer ,
-	} ;
-	var layerControl=L.control.layers(null,overlays).addTo(map) ;
+	} ;*/
+	//L.control.layers(null,overlays).addTo(map) ;
 
 	
 	// Module which adds graticule (lat/lng lines)
