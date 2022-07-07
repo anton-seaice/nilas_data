@@ -25,9 +25,11 @@ L.ImageOverlay.TimeLocal=L.ImageOverlay.extend({
 	onAdd: function(map) {
 		//grab the current date from the map
 		this.updateTime(map) ;
-
+				
 		// set up events
-		map.on('dayChanged', this.updateTime, this) ;
+		if (this.options.freq=='yearly') { map.on('yearChanged', this.updateTime, this) ; }
+		else if (this.options.freq=='monthly') { map.on('monthlyChanged', this.updateTime, this) ; }
+		else { map.on('dayChanged', this.updateTime, this) ; } ;
 		
 		L.ImageOverlay.prototype.onAdd.call(this,map) ;
 		
@@ -35,7 +37,9 @@ L.ImageOverlay.TimeLocal=L.ImageOverlay.extend({
 	} ,
 	
 	onRemove: function(map) {
-		map.off('dayChanged', this.updateTime, this) ;
+		if (this.options.freq=='yearly') { map.off('yearChanged', this.updateTime, this) ; }
+		else if (this.options.freq=='monthly') { map.off('monthlyChanged', this.updateTime, this) ; }
+		else { map.off('dayChanged', this.updateTime, this) ; } ;
 		
 		L.ImageOverlay.prototype.onRemove.call(this,map) ;
 	},
@@ -51,7 +55,15 @@ L.ImageOverlay.TimeLocal=L.ImageOverlay.extend({
 		const d = new Date(this._time);
 		const year = String(d.getFullYear());
 		const month = String(d.getMonth() +1) ; //zero indexed
-		return this._basePath+year+'_'+month+this._fileExtension ;
+		const day = String(d.getDate()) ;
+		
+		if (this.options.freq=='yearly') { 
+			return this._basePath+year+this._fileExtension ;
+		} 
+		else if (this.options.freq=='monthly') {
+			return this._basePath+year+'_'+month+this._fileExtension ;
+		} 
+		else return this._basePath+year+'_'+month+'_'+day+this._fileExtension ;
 	}
 	
 })
@@ -60,11 +72,28 @@ L.imageOverlay.timeLocal = function (time, fileBasePath, fileExtension, bounds, 
 	return new L.ImageOverlay.TimeLocal(time, fileBasePath, fileExtension, bounds, options) ;
 }
 
+L.ImageOverlay.TimeLocal.Bremen=L.ImageOverlay.TimeLocal.extend({
+	
+	_localUrl: function() {
+		const d = new Date(this._time);
+		const dateStr = String(
+			d.getFullYear()
+				+("0"+(d.getMonth()+1)).slice(-2)
+				+("0" + d.getDate()).slice(-2)
+			);
+    	return this._basePath+dateStr+this._fileExtension ;
+	}
+})
+
+L.imageOverlay.timeLocal.bremen = function (time, fileBasePath, fileExtension, bounds, options) {
+	return new L.ImageOverlay.TimeLocal.Bremen(time, fileBasePath, fileExtension, bounds, options) ;
+}
+
 L.TileLayer.Time = L.TileLayer.extend({
 	
 	onAdd: function(map) {
 		//grab the current date from the map
-		this.options.time=map.date +'T00:00:00Z' ;
+		this.options.time=map.date  ;
 
 		console.debug(this.options) ;
 
@@ -73,7 +102,6 @@ L.TileLayer.Time = L.TileLayer.extend({
 		
 		L.TileLayer.prototype.onAdd.call(this,map) ;
 		
-		console.log(this.getTileUrl()) ;
 	} ,
 	
 	onRemove: function(map) {
@@ -82,8 +110,7 @@ L.TileLayer.Time = L.TileLayer.extend({
 	},
 	
 	updateTime: function(eventValue) {
-		this.options.time=eventValue.date+'T00:00:00Z' ;
-		console.log(this.getTileUrl()) ;
+		this.options.time=eventValue.date ;
 		this.redraw() ;
 	}
 	
@@ -95,18 +122,18 @@ L.tileLayer.time = function (url, options) {
 
 L.TileLayer.WMS.Time = L.TileLayer.WMS.extend({
 	
+	//untested!!
+	
 	onAdd: function(map) {
-		//grab the current date from the map
-		this.options.time=map.date +'T00:00:00Z' ;
 
-		console.debug(this.options) ;
-
+		this.wmsParams.time=map.date ;
+		console.debug(this.wmsParams) ;
+		
 		// set up events
 		map.on('dayChanged', this.updateTime, this) ;
 		
 		L.TileLayer.WMS.prototype.onAdd.call(this,map) ;
 		
-		//console.log(this.getTileUrl()) ;
 	} ,
 	
 	onRemove: function(map) {
@@ -115,9 +142,8 @@ L.TileLayer.WMS.Time = L.TileLayer.WMS.extend({
 	},
 	
 	updateTime: function(eventValue) {
-		this.options.time=eventValue.date+'T00:00:00Z' ;
-		//console.log(this.getTileUrl()) ;
-		this.redraw() ;
+		this.setParams({time:eventValue.date}) ;
+		console.debug(this.wmsParams) ;
 	}
 	
 })

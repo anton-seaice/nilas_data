@@ -1,10 +1,8 @@
 function init() {
 
 	// bounds of our layers
-	const latLngBounds = L.latLngBounds([
-		[-39.22994121216445, -42.240892341379734],
-		[-41.44603897171838, 135.0]
-	]);	
+	// we are going to use these for everything (NSIDC / epsg3412)
+	const latLngBounds = L.latLngBounds([[-39.23, -42.24],[-41.45, 135.0]] );	
 	
 	// The sp ster projection
 	const crs = new L.Proj.CRS('EPSG:3031', '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs', {
@@ -47,9 +45,15 @@ function init() {
 	//map.fitBounds(latLngBounds); //This line gives weird results, for unclear reasons.
 	
 	dateControl=L.control.date({startDateOffset:'-31'}).addTo(map) ; // Add date picker (this also write map.date)
-	L.control.fullscreen({pseudoFullscreen: true}).addTo(map) ; // Add fullscreen button
+	
+	fullscreenControl=L.control.fullscreen({pseudoFullscreen: true}).addTo(map) ; // Add fullscreen button
+	map.toggleFullscreen(fullscreenControl.options) ;
+	
 	L.graticule().addTo(map); // Adds graticule (lat/lng lines)
-	layerControl=L.control.layers(null,null).addTo(map) ; //add a layer selector //we may need to write a function to order layers by our desires
+	
+	layerControl=L.control.layers(null,null).addTo(map) ; //add a layer selector //we may need to write a 
+	
+	//function to order layers by our desires
 	//layerControl.expand() ;
 	
 	
@@ -119,16 +123,15 @@ function init() {
 				zIndex:1
 			}
 		},
-		'Bremen Sea Ice Edge (Daily)': {
-			type: 'TileLayer.WMS' ,
-			url: 'http://geos.polarview.aq/geoserver/wms', 
-			options: {
-				layers:'polarview:iceedgeS15',
-				format:'image/png',
-				transparent:true,
-				attribution:'Polarview',
+		'Sea Ice Conc High Res (Daily)':{
+			type: 'ImageOverlay' ,
+			filePath:'../data/hr_sea_ice_conc/bremen_sea_ice_conc_' ,
+			fileExt:'.png',
+			options:{
+				opacity: 0.7, 
+				attribution: "<a href='https://seaice.uni-bremen.de/sea-ice-concentration/amsre-amsr2/'>AMSR2</a>",
 				zIndex:2,
-			}
+				freq:'daily'}
 		},
 		'Sea Ice Conc (Monthly)':{
 			//used in tracker.js :
@@ -143,13 +146,18 @@ function init() {
 				attribution: "<a href='https://nsidc.org/data/g02202'>NSIDC CDR</a>", 
 				alt: "Map of Monthly Sea Ice Concentration", 
 				errorOverlayUrl:'',
-				zIndex:2} 
+				zIndex:2,
+				freq:'monthly'} 
 		},
 		'Sea Ice Conc Anoms (Monthly)':{
 			type: 'ImageOverlay' ,
 			filePath:'../data/sea_ice_conc_anoms/nsidc_sea_ice_conc_anoms_' ,
 			fileExt:'.svg',
-			options:{opacity: 0.7, attribution: "Derived (<a href='https://nsidc.org/data/g02202'>1981-2010 Climatology</a>)",zIndex:3}
+			options:{
+				opacity: 0.7, 
+				attribution: "Derived (<a href='https://nsidc.org/data/g02202'>1981-2010 Climatology</a>)",
+				zIndex:3,
+				freq:'monthly'}
 		},
 	} ;
 	
@@ -159,6 +167,11 @@ function init() {
 		iLayer=timeLayerInfo[iKey] ;
 		if (iLayer.type=='ImageOverlay') {
 			mapLayer=L.imageOverlay.timeLocal(
+				map.date, iLayer.filePath, iLayer.fileExt, latLngBounds, iLayer.options 
+				) ;
+			layerControl.addOverlay(mapLayer, iKey) ;
+		} else if (iLayer.type=='ImageOverlay.Bremen') {
+			mapLayer=L.imageOverlay.timeLocal.bremen(
 				map.date, iLayer.filePath, iLayer.fileExt, latLngBounds, iLayer.options 
 				) ;
 			layerControl.addOverlay(mapLayer, iKey) ;
