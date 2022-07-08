@@ -120,7 +120,8 @@ function init() {
 				noWrap: true,
 				continuousWorld: true,
 				attribution:"<a href='https://earthdata.nasa.gov/gibs'>NASA</a>",
-				zIndex:1
+				zIndex:1,
+				freq:'monthly'
 			}
 		},
 		'Sea Ice Conc High Res (Daily)':{
@@ -144,7 +145,7 @@ function init() {
 			options:{
 				opacity: 1, 
 				attribution: "<a href='https://nsidc.org/data/g02202'>NSIDC CDR</a>", 
-				alt: "Map of Monthly Sea Ice Concentration", 
+				alt: "Map of Sea Ice Concentration", 
 				errorOverlayUrl:'',
 				zIndex:2,
 				freq:'monthly'} 
@@ -156,6 +157,7 @@ function init() {
 			options:{
 				opacity: 0.7, 
 				attribution: "Derived (<a href='https://nsidc.org/data/g02202'>1981-2010 Climatology</a>)",
+				alt: "Map of Sea Ice Concentration",
 				zIndex:3,
 				freq:'monthly'}
 		},
