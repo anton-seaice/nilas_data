@@ -28,7 +28,7 @@ L.ImageOverlay.TimeLocal=L.ImageOverlay.extend({
 				
 		// set up events
 		if (this.options.freq=='yearly') { map.on('yearChanged', this.updateTime, this) ; }
-		else if (this.options.freq=='monthly') { map.on('monthlyChanged', this.updateTime, this) ; }
+		else if (this.options.freq=='monthly') { map.on('monthChanged', this.updateTime, this) ; }
 		else { map.on('dayChanged', this.updateTime, this) ; } ;
 		
 		L.ImageOverlay.prototype.onAdd.call(this,map) ;
@@ -38,7 +38,7 @@ L.ImageOverlay.TimeLocal=L.ImageOverlay.extend({
 	
 	onRemove: function(map) {
 		if (this.options.freq=='yearly') { map.off('yearChanged', this.updateTime, this) ; }
-		else if (this.options.freq=='monthly') { map.off('monthlyChanged', this.updateTime, this) ; }
+		else if (this.options.freq=='monthly') { map.off('monthChanged', this.updateTime, this) ; }
 		else { map.off('dayChanged', this.updateTime, this) ; } ;
 		
 		L.ImageOverlay.prototype.onRemove.call(this,map) ;
