@@ -1,17 +1,16 @@
 function init() {
 
 	// bounds of our layers
-	// we are going to use these for everything (NSIDC / epsg3412)
 	const latLngBounds = L.latLngBounds([[-39.23, -42.24],[-41.45, 135.0]] );	
 	
 	// The sp ster projection
 	const crs = new L.Proj.CRS('EPSG:3031', '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs', {
 		resolutions: [8192, 4096, 2048, 1024, 512, 256], //these are the same as the nasa GIBS ones
 		origin: [-4194304, 4194304],
-		bounds: L.bounds (
-		  [-4194304, -4194304],
-		  [4194304, 4194304]
-		)
+		//bounds: L.bounds (
+		//  [-4194304, -4194304],
+		//  [4194304, 4194304]
+		//)
 	});
 		
 	//coastlines
@@ -40,16 +39,27 @@ function init() {
 		center: [-90, 0],
 		zoom: 0,
 		crs: crs,
-		maxZoom: 4
+		//maxZoom: 4
 	});
 	//map.fitBounds(latLngBounds); //This line gives weird results, for unclear reasons.
+	
 	
 	dateControl=L.control.date({startDateOffset:'-31'}).addTo(map) ; // Add date picker (this also write map.date)
 	
 	fullscreenControl=L.control.fullscreen({pseudoFullscreen: true}).addTo(map) ; // Add fullscreen button
 	map.toggleFullscreen(fullscreenControl.options) ;
 	
-	L.graticule().addTo(map); // Adds graticule (lat/lng lines)
+	
+	
+	L.graticule({
+		pointToLayer:function (geoJsonPoint, latlng) {
+			console.log(geoJsonPoint);
+			console.log(latlng);
+			return L.marker(latlng);
+		},
+		interval: 10, 
+		style: {color: '#333',weight: 0.7}
+		}).addTo(map); // Adds graticule (lat/lng lines)
 	
 	layerControl=L.control.layers(null,null).addTo(map) ; //add a layer selector //we may need to write a 
 	
@@ -128,6 +138,7 @@ function init() {
 			type: 'ImageOverlay' ,
 			filePath:'../data/hr_sea_ice_conc/bremen_sea_ice_conc_' ,
 			fileExt:'.png',
+			bounds: latLngBounds ,
 			options:{
 				opacity: 0.7, 
 				attribution: "<a href='https://seaice.uni-bremen.de/sea-ice-concentration/amsre-amsr2/'>AMSR2</a>",
@@ -141,6 +152,7 @@ function init() {
 			//used by L.ImageOverlay.TileLocal extension :
 			filePath:'../data/sea_ice_conc/nsidc_sea_ice_conc_' ,
 			fileExt:'.png',
+			bounds: latLngBounds ,
 			//used by L.ImageOverlay base class
 			options:{
 				opacity: 1, 
@@ -154,12 +166,39 @@ function init() {
 			type: 'ImageOverlay' ,
 			filePath:'../data/sea_ice_conc_anoms/nsidc_sea_ice_conc_anoms_' ,
 			fileExt:'.svg',
+			bounds: latLngBounds ,
 			options:{
 				opacity: 0.7, 
 				attribution: "Derived (<a href='https://nsidc.org/data/g02202'>1981-2010 Climatology</a>)",
 				alt: "Map of Sea Ice Concentration",
 				zIndex:3,
 				freq:'monthly'}
+		},
+		'Chlorophyll Conc (Monthly)':{
+			type: 'ImageOverlay' ,
+			filePath:'../data/chlor_conc/occci_chlor_conc_' ,
+			fileExt:'.png',
+			bounds: [[-23.13, -45],[-23.13, 135.0]] ,
+			options:{
+				opacity: 1, 
+				attribution: "<a href='https://www.oceancolour.org/'>Ocean Colour - CCI</a>",
+				alt: "Map of Chlorophyll Concentration",
+				zIndex:2,
+				freq:'monthly',
+			}
+		},
+		'Chlorophyll Conc Anoms (Monthly)':{
+			type: 'ImageOverlay' ,
+			filePath:'../data/chlor_conc_anoms/occci_chlor_conc_anoms_' ,
+			fileExt:'.png',
+			bounds: [[-23.13, -45],[-23.13, 135.0]] ,
+			options:{
+				opacity: 1, 
+				attribution: "Derived <a href='https://www.oceancolour.org/'>1998-2020 Climatology</a>)",
+				alt: "Map of Chlorophyll Concentration Anomalies",
+				zIndex:3,
+				freq:'monthly',
+			}
 		},
 	} ;
 	
@@ -169,12 +208,12 @@ function init() {
 		iLayer=timeLayerInfo[iKey] ;
 		if (iLayer.type=='ImageOverlay') {
 			mapLayer=L.imageOverlay.timeLocal(
-				map.date, iLayer.filePath, iLayer.fileExt, latLngBounds, iLayer.options 
+				map.date, iLayer.filePath, iLayer.fileExt, iLayer.bounds, iLayer.options 
 				) ;
 			layerControl.addOverlay(mapLayer, iKey) ;
 		} else if (iLayer.type=='ImageOverlay.Bremen') {
 			mapLayer=L.imageOverlay.timeLocal.bremen(
-				map.date, iLayer.filePath, iLayer.fileExt, latLngBounds, iLayer.options 
+				map.date, iLayer.filePath, iLayer.fileExt, iLayer.bounds, iLayer.options 
 				) ;
 			layerControl.addOverlay(mapLayer, iKey) ;
 		} else if (iLayer.type=='TileLayer') {
