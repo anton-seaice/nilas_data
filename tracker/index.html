@@ -4,28 +4,11 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<title>Sea Ice Tracker Demo</title>
+	<title>Sea Ice Tracker Demo from Vite</title>
 		
-    <link rel="stylesheet" href="libraries/leaflet/leaflet.css" />
-	<link rel='stylesheet' href='libraries/Leaflet.fullscreen-gh-pages/dist/leaflet.fullscreen.css'  />
 	<link rel="stylesheet" href="tracker.css" />
-	
-	<!-- Package manager (requirejs) ? I think when you move to a webserver, you'll be able to load one module that then imports all these files.-->
-    <script src="libraries/leaflet/leaflet.js" ></script> 
-	<script src="libraries/Proj4Leaflet-1.0.1/lib/proj4.js" ></script>
-	<script src="libraries/Proj4Leaflet-1.0.1/src/proj4leaflet.js" ></script>
-	<script src="libraries/L.Graticule.js"></script>
-	<script src="libraries/Leaflet.fullscreen-gh-pages/dist/Leaflet.fullscreen.min.js"></script>
-	
-	<!-- set up map-->
-	<script src = "libraries/L.Layer.TimeLocal.js"></script>
-	<script src = "libraries/L.Control.Date.js"></script>
-	<script src = "tracker.js"></script>
 
-	<!-- a hack to load json -->
-	<script src = "miz_stations.js"></script>
-	<script src = "../data/sea_ice_extent/ice_edge.js"></script> 
-	<script src = "../data/sea_ice_extent/ice_solid.js"></script>
+	<script type ="module" src ="./tracker.js"></script>
 
 </head>
 

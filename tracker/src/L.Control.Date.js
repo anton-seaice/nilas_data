@@ -32,7 +32,7 @@ L.Control.Date=L.Control.extend({
 		let maxDate = new Date() ;
 		
 		maxDate.setTime(myDate.getTime()+this.options.maxDateOffset*60*60*24*1000) ;
-		maxDateStr=maxDate.toISOString().substr(0, 10) ;
+		let maxDateStr=maxDate.toISOString().substr(0, 10) ;
 		
 		myDate.setTime(myDate.getTime()+this.options.startDateOffset*60*60*24*1000) ;	
 		map.date = myDate.toISOString().substr(0, 10) ;
@@ -80,6 +80,7 @@ L.Control.Date=L.Control.extend({
 })
 
 L.control.date = function (options) {
-	return new L.Control.Date(options)
+	return new L.Control.Date(options) ;
 }
+
 
