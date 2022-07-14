@@ -13,7 +13,7 @@ Changes in the date can be watched through listeners on these keywords:
 
 L.Control.Date=L.Control.extend({
 	
-	includes: L.Evented.prototype ,
+	includes: L.Evented ,
 	
 	options: {
 		position: 'bottomleft',

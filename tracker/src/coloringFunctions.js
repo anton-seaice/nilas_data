@@ -13,7 +13,7 @@ const color = {
 	},
 	greenMarkerFn(feature, latlng) { //shiptrack
 		const markerOptions = {
-			radius: 5,
+			radius: 4,
 			fillColor: "#66c2a5",
 			color: "#000",
 			weight: 0,

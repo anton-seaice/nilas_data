@@ -54,7 +54,7 @@ function init() {
 	}).addTo(map);
 	
 	// Add date picker (global access through map.date)
-	let dateControl=L.control.date({startDateOffset:'-31'}).addTo(map) ; 
+	let dateControl=L.control.date({startDateOffset:'-31', minDate: '2018-01-01'}).addTo(map) ; 
 	
 	// Add fullscreen button
 	let fullscreenControl=L.control.fullscreen({pseudoFullscreen: true}).addTo(map) ; 
@@ -71,6 +71,8 @@ function init() {
 	let shipLayer=L.geoJSON.local('data/miz_stations.geojson', { pointToLayer: color.greenMarkerFn } ) ;
 	layerControl.addOverlay(shipLayer, 'Tentative Ship Track', {zIndex:5}) ;
 	
+	let tt = L.tooltip({permanent:true}, shipLayer) ;
+	tt.bindTooltip("Ship track is based on 2021 Sea Ice Extent, but will be adjusted to suit the conditions in 2023").openTooltip() ;
 	
 	//Make the time dependent layers
 	console.log("Loading Time Layers") ;
@@ -78,7 +80,6 @@ function init() {
 	// - loop through the layers information provided, and create a layer obj for each layer according to its type and add it to the map
 	// ? rewrite as state machine ?
 	for (const iKey in timeLayerInfo) {
-			
 		const iLayer=timeLayerInfo[iKey] ;
 		if (iLayer.type=='ImageOverlay') {
 			var mapLayer=L.imageOverlay.timeLocal(
@@ -103,11 +104,9 @@ function init() {
 			layerControl.addOverlay(mapLayer, iKey) ;
 		} else {
 			console.error(iLayer.type + ' of ' + iKey + ' not recognised') ;
-		}
-		//turn on this layer if configured too
-		if (iLayer.showAtOpen) {
-			mapLayer.addTo(map) ;
 		} ;
+		//turn on the layer if configured too
+		if (iLayer.showAtOpen) { mapLayer.addTo(map) ; } ;
 	} ;
 	
 	// debug logging

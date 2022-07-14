@@ -13,8 +13,8 @@ L.GeoJSON.Local = L.GeoJSON.extend({
 	
 
 	options: {
-		interactive:false ,
-		bubblingMouneEvents:false
+		//interactive:false ,
+		//bubblingMouseEvents:false
 	},
 	
 	initialize(path, options) {

@@ -31,7 +31,7 @@ const timeLayerInfo = {
 	},
 	'Sea Ice Conc High Res (Daily)':{
 		type: 'ImageOverlay' ,
-		filePath:'../data/hr_sea_ice_conc/bremen_sea_ice_conc_' ,
+		filePath:'data/hr_sea_ice_conc/bremen_sea_ice_conc_' ,
 		fileExt:'.png',
 		options:{
 			opacity: 0.7, 
@@ -44,7 +44,7 @@ const timeLayerInfo = {
 		type: 'ImageOverlay' ,
 		showAtOpen:true , //this field is optional,
 		//used by L.ImageOverlay.TileLocal extension :
-		filePath:'../data/sea_ice_conc/nsidc_sea_ice_conc_' ,
+		filePath:'data/sea_ice_conc/nsidc_sea_ice_conc_' ,
 		fileExt:'.png',
 		//used by L.ImageOverlay base class
 		options:{
@@ -57,7 +57,7 @@ const timeLayerInfo = {
 	},
 	'Sea Ice Conc Anoms (Monthly)':{
 		type: 'ImageOverlay' ,
-		filePath:'../data/sea_ice_conc_anoms/nsidc_sea_ice_conc_anoms_' ,
+		filePath:'data/sea_ice_conc_anoms/nsidc_sea_ice_conc_anoms_' ,
 		fileExt:'.svg',
 		options:{
 			opacity: 0.7, 
@@ -79,7 +79,7 @@ const timeLayerInfo = {
 	},		
 	'Chlorophyll Conc (Monthly)':{
 		type: 'ImageOverlay' ,
-		filePath:'../data/chlor_conc/occci_chlor_conc_' ,
+		filePath:'data/chlor_conc/occci_chlor_conc_' ,
 		fileExt:'.png',
 		bounds: [[-23.13, -45],[-23.13, 135.0]] ,
 		options:{
@@ -92,7 +92,7 @@ const timeLayerInfo = {
 	},
 	'Chlorophyll Conc Anoms (Monthly)':{
 		type: 'ImageOverlay' ,
-		filePath:'../data/chlor_conc_anoms/occci_chlor_conc_anoms_' ,
+		filePath:'data/chlor_conc_anoms/occci_chlor_conc_anoms_' ,
 		fileExt:'.png',
 		bounds: [[-23.13, -45],[-23.13, 135.0]] ,
 		options:{
