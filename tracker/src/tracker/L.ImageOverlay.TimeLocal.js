@@ -1,4 +1,5 @@
 import TimeLocal from './timeLocal.js' ;
+import './L.ImageOverlay.Legend.js' ;
 
 /* class ImageOverlay.TimeLocal
 aka L.ImageOverlay.TimeLocal
@@ -6,15 +7,26 @@ aka L.ImageOverlay.TimeLocal
 
 Uses to load a single image from local storage based on the specified time
 
-Options are unchanged from L.ImageOverlay
+useage:
+
+L.imageOverlay.timeLocal=(time, fileBasePath, fileExtension, bounds, options) 
+
+time,fileBasePath and fileExtension are used by 'mixin' TimeLocal
+
+Bounds is unchanged from L.ImageOverlay
+
+The following options are additional to those from L.ImageOverlay:
+freq: 'daily'/'monthly'/'yearly' to specify how far apart images are in time
+legendUrl: sets the path to an image with the legend for these overlays.
 
 */
 
-L.ImageOverlay.TimeLocal=L.ImageOverlay.extend({
+L.ImageOverlay.TimeLocal=L.ImageOverlay.Legend.extend({
 		
 	includes: TimeLocal ,
 		
-	initialize(time, fileBasePath, fileExtension, bounds, options ) { // (String (dd-mm-yyyy) , String, String, LatLngBounds, Object)
+	initialize(time, fileBasePath, fileExtension, bounds, options ) { 
+	// (String (dd-mm-yyyy), String, String, LatLngBounds, Object)
 			
 		this.setupTimeLocal(
 			fileBasePath, fileExtension, options
@@ -28,21 +40,19 @@ L.ImageOverlay.TimeLocal=L.ImageOverlay.extend({
 	
 	onAdd(map) {
 		
-		//grab the current date from the map
-		this.updateTime(map) ;
-				
 		this.startEventListener(map) ;
 		
-		L.ImageOverlay.prototype.onAdd.call(this,map) ;
+		this.setUrl(this.localUrl(map.date)) ;
+		
+		L.ImageOverlay.Legend.prototype.onAdd.call(this,map) ;
 		
 	} ,
 	
 	onRemove(map) {
-		if (this.options.freq=='yearly') { map.off('yearChanged', this.updateTime, this) ; }
-		else if (this.options.freq=='monthly') { map.off('monthChanged', this.updateTime, this) ; }
-		else { map.off('dayChanged', this.updateTime, this) ; } ;
 		
-		L.ImageOverlay.prototype.onRemove.call(this,map) ;
+		this.stopEventListener(map) ;
+		
+		L.ImageOverlay.Legend.prototype.onRemove.call(this,map) ;
 	},
 	
 	updateTime(eventValue) {
@@ -63,14 +73,12 @@ Uses to load a single image from local storage based on the specified time
 
 Constructs file names consistent with unchanged Bremen files (if desired).
 
-Options are unchanged from L.ImageOverlay
-
 */
 
 L.ImageOverlay.TimeLocal.Bremen=L.ImageOverlay.TimeLocal.extend({
 	
-	localUrl: function() {
-		const d = new Date(this._time);
+	localUrl(time) {
+		const d = new Date(time);
 		const dateStr = String(
 			d.getFullYear()
 				+("0"+(d.getMonth()+1)).slice(-2)

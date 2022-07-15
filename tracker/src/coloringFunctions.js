@@ -1,26 +1,34 @@
 const color = {
-	iceExtentFn(feature) {
-		if (feature.properties.z_value==0.15) {
-			return {color: '#fc8d62'} ;
+	
+	//ice extent
+	contour15: '#fc8d62' ,
+	contour80: '#f5f5f5' ,
+	
+	iceExtentFn(feature) {	
+		if (feature.properties.z_value==0.15) {		
+			return {color: color.contour15} ;
 		}
 		else if (feature.properties.z_value==0.8) {
-			return {color: '#f5f5f5'} ;
+			return {color: color.contour80} ;
 		}
 		else {
 			console.debug(feature.properties.z_value + " is not a known contour level to color")
 			return {} ;
 		}
-	},
-	greenMarkerFn(feature, latlng) { //shiptrack
-		const markerOptions = {
+	} ,
+	
+	//shiptrack
+	shipTrackMarker: {
 			radius: 4,
 			fillColor: "#66c2a5",
 			color: "#000",
 			weight: 0,
 			opacity: 1,
 			fillOpacity: 1
-		};
-		return L.circleMarker(latlng, markerOptions) ;
+		},
+		
+	greenMarkerFn(feature, latlng) {
+		return L.circleMarker(latlng, color.shipTrackMarker) ;
 	}
 	
 }

@@ -14,7 +14,7 @@ import color from './src/coloringFunctions.js' ;
 
 const timeLayerInfo = {
 	'MODIS Imagery (Daily)':{
-		"type": "TileLayer" ,
+		type: "TileLayer" ,
 		url:"http://map1{s}.vis.earthdata.nasa.gov/wmts-antarctic/{layer}/default/{time}/{tileMatrixSet}/{z}/{y}/{x}.jpg",
 		options:{
 			layer: "MODIS_Aqua_CorrectedReflectance_TrueColor",
@@ -37,7 +37,9 @@ const timeLayerInfo = {
 			opacity: 0.7, 
 			attribution: "<a href='https://seaice.uni-bremen.de/sea-ice-concentration/amsre-amsr2/'>AMSR2</a>",
 			zIndex:2,
-			freq:'daily'}
+			freq:'daily',
+			legendUrl:'data/sea_ice_conc_legend.png'
+		}
 	},
 	'Sea Ice Conc (Monthly)':{
 		//used in tracker.js :
@@ -53,7 +55,9 @@ const timeLayerInfo = {
 			alt: "Map of Sea Ice Concentration", 
 			errorOverlayUrl:'',
 			zIndex:2,
-			freq:'monthly'} 
+			freq:'monthly',
+			legendUrl:'data/sea_ice_conc_legend.png'
+		} 
 	},
 	'Sea Ice Conc Anoms (Monthly)':{
 		type: 'ImageOverlay' ,
@@ -64,7 +68,9 @@ const timeLayerInfo = {
 			attribution: "Derived (<a href='https://nsidc.org/data/g02202'>1981-2010 Climatology</a>)",
 			alt: "Map of Sea Ice Concentration",
 			zIndex:3,
-			freq:'monthly'}
+			freq:'monthly',
+			legendUrl:'data/sea_ice_conc_anoms_legend.png'
+		}
 	},
 	'Sea Ice Extent (Monthly)': {
 		type:'GeoJSON',
@@ -74,7 +80,15 @@ const timeLayerInfo = {
 			zIndex:4 ,
 			freq:'monthly', 
 			style: color.iceExtentFn,
-			attribution: "Ice Extent Derived from <a href='https://nsidc.org/data/g02202'>NSIDC CDR</a>"
+			attribution: "Ice Extent Derived from <a href='https://nsidc.org/data/g02202'>NSIDC CDR</a>",
+			legend: {
+				style: 'line',
+				colors: [color.contour15, color.contour80] ,
+				labels: [
+					'15% Concentration (Sea Ice Extent)',
+					'80% Concentration'
+				]
+			}
 		}
 	},		
 	'Chlorophyll Conc (Monthly)':{
@@ -88,6 +102,7 @@ const timeLayerInfo = {
 			alt: "Map of Chlorophyll Concentration",
 			zIndex:2,
 			freq:'monthly',
+			legendUrl:'data/chlor_conc_legend.png'
 		}
 	},
 	'Chlorophyll Conc Anoms (Monthly)':{
@@ -101,6 +116,7 @@ const timeLayerInfo = {
 			alt: "Map of Chlorophyll Concentration Anomalies",
 			zIndex:3,
 			freq:'monthly',
+			legendUrl:'data/chlor_conc_anoms_legend.png'
 		}
 	}
 } ;
