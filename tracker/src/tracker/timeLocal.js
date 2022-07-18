@@ -10,6 +10,8 @@ fileExtension is all parts of the url that go after the date in the url
 options are shared with the leaflet class, the one used here is:
 freq: 'daily'/'monthly'/'yearly' to specify how far apart images are in time
 
+The leaflet extension class needs a 'updateTime: function(event)'  which is triggered when the date of the map is changed 
+
 */
 
 var TimeLocal={	
@@ -41,27 +43,41 @@ var TimeLocal={
 		const month = String(d.getMonth() +1) ; //zero indexed
 		const day = String(d.getDate()) ;
 		
-		if (this.options.freq=='yearly') { 
-			return this._basePath+year+this._fileExtension ;
-		} 
-		else if (this.options.freq=='monthly') {
-			return this._basePath+year+'_'+month+this._fileExtension ;
-		} 
-		else return this._basePath+year+'_'+month+'_'+day+this._fileExtension ;
-		
+		switch(this.options.freq) {
+			case 'yearly' :
+				return this._basePath+year+this._fileExtension ;
+			case 'monthly' :
+				return this._basePath+year+'_'+month+this._fileExtension ;
+			case 'monthly mean' :
+				return this._basePath+month+this._fileExtension ;
+			default :
+				return this._basePath+year+'_'+month+'_'+day+this._fileExtension ;
+		};
 	} ,
 	
 	startEventListener(map) {
 		// start lisiting for date change events from the datePicker.
-		if (this.options.freq=='yearly') { map.on('yearChanged', this.updateTime, this) ; }
-		else if (this.options.freq=='monthly') { map.on('monthChanged', this.updateTime, this) ; }
-		else { map.on('dayChanged', this.updateTime, this) ; } ;
+		switch(this.options.freq) {
+			case 'yearly' : 
+				 map.on('yearChanged', this.updateTime, this) ; 
+			case 'monthly' :
+			case 'monthly mean': 
+				map.on('monthChanged', this.updateTime, this) ; 
+			default : 
+				map.on('dayChanged', this.updateTime, this) ; 
+		} ;
 	} ,
 	
 	stopEventListener(map) {
-		if (this.options.freq=='yearly') { map.off('yearChanged', this.updateTime, this) ; }
-		else if (this.options.freq=='monthly') { map.off('monthChanged', this.updateTime, this) ; }
-		else { map.off('dayChanged', this.updateTime, this) ; } ;
+		switch(this.options.freq) {
+			case 'yearly' : 
+				 map.off('yearChanged', this.updateTime, this) ; 
+			case 'monthly' :
+			case 'monthly mean': 
+				map.off('monthChanged', this.updateTime, this) ; 
+			default : 
+				map.off('dayChanged', this.updateTime, this) ; 
+		} ;
 	}
 		
 }

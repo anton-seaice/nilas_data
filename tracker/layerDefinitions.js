@@ -1,4 +1,4 @@
-import color from './src/coloringFunctions.js' ;
+import {color} from './src/coloringFunctions.js' ;
 
 /*for each layer with a time domain, configure using the examples below options are passed as options to the initialize function of the class set zIndex as follows:
 	 zIndex: 1 (default) for baseLayers
@@ -37,7 +37,7 @@ export const timeLayers = {
 			opacity: 0.7, 
 			attribution: "<a href='https://seaice.uni-bremen.de/sea-ice-concentration/amsre-amsr2/'>AMSR2</a>",
 			zIndex:2,
-			freq:'daily',
+			//freq:'daily',
 			legendUrl:'data/sea_ice_conc_legend.png'
 		}
 	},
@@ -92,7 +92,26 @@ export const timeLayers = {
 				]
 			}
 		}
-	},		
+	},
+	'Mean Sea Ice Extent': {
+		type:'GeoJSON',
+		filePath:'data/sea_ice_extent_mean/ice_extent_mean_',
+		fileExt:'.geojson',
+		options: {
+			zIndex:4 ,
+			freq:'monthly mean', 
+			style: color.iceExtentFn,
+			attribution: "Ice Extent Derived from <a href='https://nsidc.org/data/g02202'>NSIDC CDR</a>",
+			legend: {
+				style: 'line',
+				colors: [color.contour15, color.contour80] ,
+				labels: [
+					'Mean 15% Concentration',
+					'Mean 80% Concentration'
+				]
+			}
+		}
+	},				
 	'Chlorophyll Conc (Monthly)':{
 		type: 'ImageOverlay' ,
 		filePath:'data/chlor_conc/occci_chlor_conc_' ,

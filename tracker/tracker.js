@@ -11,11 +11,14 @@ import './tracker.css' ;
 import './src/L.Graticule.js' ;
 import './src/L.Layer.TimeLocal.js' ;
 import './src/L.Control.Date.js' ;
-import color from './src/coloringFunctions.js' ;
+import './src/L.Control.Position.js' ;
+import {color} from './src/coloringFunctions.js' ;
 
 //config
 import {timeLayers} from './layerDefinitions.js' ;
 
+
+      
 function init() {
 	
 	// bounds of NSIDC / epsg3412
@@ -45,11 +48,11 @@ function init() {
 	});
 	
 	//coastlines - shown always
-	const coastlines = L.tileLayer.wms('http://geos.polarview.aq/geoserver/wms', {
-		layers:'polarview:coastS10',
-		format:'image/png',
+	const coastlines = L.tileLayer.wms("http://geos.polarview.aq/geoserver/wms", {
+		layers:"polarview:coastS10",
+		format:"image/png",
 		transparent:true,
-		attribution:'Polarview',
+		attribution:"Polarview",
 		zIndex:5,
 	}).addTo(map);
 	
@@ -61,11 +64,24 @@ function init() {
 	map.toggleFullscreen(fullscreenControl.options) ;
 	
 	// Adds graticule (lat/lng lines)
-	L.graticule().addTo(map); 
+	L.graticule({interval: 10}).addTo(map); 
 	
 	//add a layer selector
 	let layerControl=L.control.layers(null,null).addTo(map) ;  //we may need to write a function to style layers by our desires
 	//layerControl.expand() ;
+	
+	let position = L.control.position().addTo(map) ;
+	
+	map.on('mousemove', function (event) {
+			let lat = Math.round(event.latlng.lat * 100) / 100;
+			let lng = Math.round(event.latlng.lng * 100) / 100;
+			this.updateHTML(lat, lng);
+		  }, position);
+  	map.on('mouseout', position.hide, position) ;
+
+
+
+	
 	
 	//non-time layers:
 	let shipLayer=L.geoJSON.local('data/miz_stations.geojson', { pointToLayer: color.greenMarkerFn } ) ;
