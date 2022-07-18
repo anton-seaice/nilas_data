@@ -14,7 +14,7 @@ import './src/L.Control.Date.js' ;
 import color from './src/coloringFunctions.js' ;
 
 //config
-import timeLayerInfo from './layerDefinitions.js' ;
+import {timeLayers} from './layerDefinitions.js' ;
 
 function init() {
 	
@@ -29,8 +29,8 @@ function init() {
 			resolutions: [8192, 4096, 2048, 1024, 512, 256], //these are the same as the nasa GIBS ones
 			origin: [-4194304, 4194304],
 			bounds: L.bounds (
-			  [-4194304, -4194304],
-			  [4194304, 4194304]
+			  [-5000000, -5000000],
+			  [5000000, 5000000]
 			)
 		}
 	);
@@ -73,22 +73,30 @@ function init() {
 				
 	//Make the time dependent layers
 	console.log("Loading Time Layers") ;
-	console.debug(timeLayerInfo) ;
+	console.debug(timeLayers) ;
 	
 	
 	// - loop through the layers information provided, and create a layer obj for each layer according to its type and add it to the map	
-	for (const iKey in timeLayerInfo) {
-		const iLayer=timeLayerInfo[iKey] ;
+	for (const iKey in timeLayers) {
+		const iLayer=timeLayers[iKey] ;
+		
+		//if bounds are provided use them, otherwise use default for map
+		if (iLayer.bounds) {
+			var iBounds = iLayer.bounds ;
+		} else {
+			var iBounds = latLngBounds ;
+		}
+		
 		
 		switch(iLayer.type) {
 			case 'ImageOverlay': 
 				var mapLayer=L.imageOverlay.timeLocal(
-					map.date, iLayer.filePath, iLayer.fileExt, latLngBounds, iLayer.options 
+					map.date, iLayer.filePath, iLayer.fileExt, iBounds, iLayer.options 
 					) ;
 				break ;
 			case 'ImageOverlay.Bremen':
 				var mapLayer=L.imageOverlay.timeLocal.bremen(
-					map.date, iLayer.filePath, iLayer.fileExt, latLngBounds, iLayer.options 
+					map.date, iLayer.filePath, iLayer.fileExt, iBounds, iLayer.options 
 					) ;
 				break ;
 			case 'TileLayer' :

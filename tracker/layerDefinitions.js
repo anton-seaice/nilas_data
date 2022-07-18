@@ -12,7 +12,7 @@ import color from './src/coloringFunctions.js' ;
 */
 
 
-const timeLayerInfo = {
+export const timeLayers = {
 	'MODIS Imagery (Daily)':{
 		type: "TileLayer" ,
 		url:"http://map1{s}.vis.earthdata.nasa.gov/wmts-antarctic/{layer}/default/{time}/{tileMatrixSet}/{z}/{y}/{x}.jpg",
@@ -48,14 +48,16 @@ const timeLayerInfo = {
 		//used by L.ImageOverlay.TileLocal extension :
 		filePath:'data/sea_ice_conc/nsidc_sea_ice_conc_' ,
 		fileExt:'.png',
-		//used by L.ImageOverlay base class
 		options:{
+			//used by L.ImageOverlay base class
 			opacity: 1, 
 			attribution: "<a href='https://nsidc.org/data/g02202'>NSIDC CDR</a>", 
 			alt: "Map of Sea Ice Concentration", 
 			errorOverlayUrl:'',
 			zIndex:2,
+			//used by L.ImageOverlay.TileLocal extension :
 			freq:'monthly',
+			//used by L.ImageOverlay.Legend extension :
 			legendUrl:'data/sea_ice_conc_legend.png'
 		} 
 	},
@@ -121,4 +123,3 @@ const timeLayerInfo = {
 	}
 } ;
 
-export default timeLayerInfo ;

@@ -34,7 +34,7 @@ L.Control.JSONLegend=L.Control.extend({
 						<line x1="10" y1="10" x2="26" y2="10" style="stroke:${this.props.colors[i]};stroke-width:3"/>
 					</svg>`
 					//+'<i style="background:' + this.props.colors[i] + '"></i> ' +
-					+this.props.labels[i] 
+					+'<span>' + this.props.labels[i] +'</span>'
 					+'<br />';
 			} ;
 		} else {
