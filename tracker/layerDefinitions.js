@@ -1,4 +1,4 @@
-import {color} from './src/coloringFunctions.js' ;
+import {color} from './colorDefinitions.js'
 
 /*for each layer with a time domain, configure using the examples below options are passed as options to the initialize function of the class set zIndex as follows:
 	 zIndex: 1 (default) for baseLayers
@@ -26,7 +26,7 @@ export const timeLayers = {
 			continuousWorld: true,
 			attribution:"<a href='https://earthdata.nasa.gov/gibs'>NASA</a>",
 			zIndex:1,
-			freq:'monthly'
+			freq:'daily'
 		}
 	},
 	'Sea Ice Conc High Res (Daily)':{
@@ -37,7 +37,7 @@ export const timeLayers = {
 			opacity: 0.7, 
 			attribution: "<a href='https://seaice.uni-bremen.de/sea-ice-concentration/amsre-amsr2/'>AMSR2</a>",
 			zIndex:2,
-			//freq:'daily',
+			freq:'daily',
 			legendUrl:'data/sea_ice_conc_legend.png'
 		}
 	},
@@ -84,8 +84,11 @@ export const timeLayers = {
 			style: color.iceExtentFn,
 			attribution: "Ice Extent Derived from <a href='https://nsidc.org/data/g02202'>NSIDC CDR</a>",
 			legend: {
-				style: 'line',
-				colors: [color.contour15, color.contour80] ,
+				type: 'line',
+				style: [
+					`stroke:${color.contour15};stroke-width:3;`,
+					`stroke:${color.contour80};stroke-width:3;`
+					],
 				labels: [
 					'15% Concentration (Sea Ice Extent)',
 					'80% Concentration'
@@ -100,11 +103,14 @@ export const timeLayers = {
 		options: {
 			zIndex:4 ,
 			freq:'monthly mean', 
-			style: color.iceExtentFn,
+			style: color.meanExtentFn,
 			attribution: "Ice Extent Derived from <a href='https://nsidc.org/data/g02202'>NSIDC CDR</a>",
 			legend: {
-				style: 'line',
-				colors: [color.contour15, color.contour80] ,
+				type: 'line',
+				style: [
+					`stroke:${color.meanContour15};stroke-width:3;stroke-dashArray:${color.meanDashArray}`,
+					`stroke:${color.meanContour80};stroke-width:3;stroke-dashArray:${color.meanDashArray}`
+					],
 				labels: [
 					'Mean 15% Concentration',
 					'Mean 80% Concentration'

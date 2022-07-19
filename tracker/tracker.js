@@ -12,10 +12,11 @@ import './src/L.Graticule.js' ;
 import './src/L.Layer.TimeLocal.js' ;
 import './src/L.Control.Date.js' ;
 import './src/L.Control.Position.js' ;
-import {color} from './src/coloringFunctions.js' ;
+
 
 //config
 import {timeLayers} from './layerDefinitions.js' ;
+import {color} from './colorDefinitions.js' ;
 
 
       
@@ -57,7 +58,7 @@ function init() {
 	}).addTo(map);
 	
 	// Add date picker (global access through map.date)
-	let dateControl=L.control.date({startDateOffset:'-31', minDate: '2018-01-01'}).addTo(map) ; 
+	let dateControl=L.control.date({startDateOffset:'-31', minDate: '2018-01-01', freq:'monthly'}).addTo(map) ; 
 	
 	// Add fullscreen button
 	let fullscreenControl=L.control.fullscreen({pseudoFullscreen: true}).addTo(map) ; 
@@ -102,8 +103,7 @@ function init() {
 		} else {
 			var iBounds = latLngBounds ;
 		}
-		
-		
+				
 		switch(iLayer.type) {
 			case 'ImageOverlay': 
 				var mapLayer=L.imageOverlay.timeLocal(

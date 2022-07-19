@@ -12,7 +12,7 @@ the image is style by the css style 'legend-img'
 
 L.Control.ImgLegend=L.Control.extend({
 	options: {
-		position: 'bottomright'
+		position: 'bottomleft'
 	} ,
 	
 	initialize(url) {

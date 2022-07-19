@@ -16,7 +16,7 @@ the legend is styled by the css style 'legend-img'
 
 L.Control.JSONLegend=L.Control.extend({
 	options: {
-		position: 'bottomright'
+		position: 'bottomleft'
 	} ,
 	
 	initialize(props) {
@@ -26,19 +26,18 @@ L.Control.JSONLegend=L.Control.extend({
 	onAdd(map) {
 		this._div = L.DomUtil.create('div', 'legend-json') ;
         
-		// loop through our density intervals and generate a label with a colored square for each interval
-		if (this.props.style=='line') {
-			for (var i = 0; i < this.props.colors.length; i++) {
+		if (this.props.type=='line') {
+			// loop through our density intervals and generate a label with a colored square for each interval
+			for (var i = 0; i < this.props.labels.length; i++) {
 				this._div.innerHTML +=
+					// use of the html here is quite messy. Maybe rewrite to use the same style function that the main geojson uses??
 					`<svg height="15" width="30">
-						<line x1="10" y1="10" x2="26" y2="10" style="stroke:${this.props.colors[i]};stroke-width:3"/>
+						<line x1="10" y1="10" x2="26" y2="10" style="${this.props.style[i]};"/>
 					</svg>`
 					//+'<i style="background:' + this.props.colors[i] + '"></i> ' +
 					+'<span>' + this.props.labels[i] +'</span>'
 					+'<br />';
 			} ;
-		} else {
-			console.log(this.props.style + " is not support for drawing in the legend")
 		}
 
 		return this._div;

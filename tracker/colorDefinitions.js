@@ -1,7 +1,7 @@
 export const color = {
 	
 	//ice extent
-	contour15: '#fc8d62' ,
+	contour15: '#d95f0e' ,
 	contour80: '#1b9e77' ,
 	
 	iceExtentFn(feature) {	
@@ -18,15 +18,16 @@ export const color = {
 	} ,
 	
 	//mean ice extent
-	meanContour15: '#fc8d62' ,
+	meanContour15: '#fe9929' ,
 	meanContour80: '#66c2a5' ,
+	meanDashArray: '3 4',
 	
-	iceExtentFn(feature) {	
+	meanExtentFn(feature) {	
 		if (feature.properties.z_value==0.15) {		
-			return {color: color.meanContour15} ;
+			return {color: color.meanContour15, dashArray:color.meanDashArray} ;
 		}
 		else if (feature.properties.z_value==0.8) {
-			return {color: color.meanContour80} ;
+			return {color: color.meanContour80, dashArray:color.meanDashArray} ;
 		}
 		else {
 			console.debug(feature.properties.z_value + " is not a known contour level to color")

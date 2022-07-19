@@ -1,3 +1,5 @@
-import './tracker/L.ImageOverlay.TimeLocal.js' ;
-import './tracker/L.TileLayer.Time.js' ;
-import './tracker/L.GeoJSON.TimeLocal.js' ;
+import './timeLocal/L.ImageOverlay.TimeLocal.js' ;
+
+import './timeLocal/L.TileLayer.Time.js' ;
+
+import './timeLocal/L.GeoJSON.TimeLocal.js' ;
