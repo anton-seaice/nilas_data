@@ -6,6 +6,7 @@ import 'proj4leaflet';
 import 'leaflet.fullscreen' ;
 import '/node_modules/leaflet.fullscreen/Control.FullScreen.css' ;
 
+
 //local imports
 import './tracker.css' ;
 import './src/L.Graticule.js' ;
@@ -30,7 +31,7 @@ function init() {
 		'EPSG:3031', 
 		'+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs', 
 		{
-			resolutions: [8192, 4096, 2048, 1024, 512, 256], //these are the same as the nasa GIBS ones
+			resolutions: [16384, 8192, 4096, 2048, 1024, 512, 256], //these are the same as the nasa GIBS ones
 			origin: [-4194304, 4194304],
 			bounds: L.bounds (
 			  [-5000000, -5000000],
@@ -65,7 +66,21 @@ function init() {
 	map.toggleFullscreen(fullscreenControl.options) ;
 	
 	// Adds graticule (lat/lng lines)
-	L.graticule({interval: 10}).addTo(map); 
+	const graticuleOptions = {
+		intervalLat: 10,
+        intervalLng: 30,
+		onEachFeature: function (feature, layer) {
+			if (feature.properties.name.match('E')) {
+				var orient = 180 ; 
+			} else {var orient = 0};
+        	
+        	layer.setText(
+        		feature.properties.name,
+        		{center:true, offset:-3, orientation:orient}
+        	);
+        }
+    } ;
+	L.graticule(graticuleOptions).addTo(map); 
 	
 	//add a layer selector
 	let layerControl=L.control.layers(null,null).addTo(map) ;  //we may need to write a function to style layers by our desires

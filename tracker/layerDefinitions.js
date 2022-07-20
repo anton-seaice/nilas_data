@@ -26,7 +26,11 @@ export const timeLayers = {
 			continuousWorld: true,
 			attribution:"<a href='https://earthdata.nasa.gov/gibs'>NASA</a>",
 			zIndex:1,
-			freq:'daily'
+			freq:'daily',
+			zoomOffset:-1,
+			minNativeZoom: 1 ,
+			//bounds: [[-43, -42.25],[-44, 135.0]] These don't work,
+			
 		}
 	},
 	'Sea Ice Conc High Res (Daily)':{

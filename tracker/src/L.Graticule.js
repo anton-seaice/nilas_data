@@ -1,3 +1,5 @@
+import 'leaflet-textpath' ;
+
 /*
  Graticule plugin for Leaflet powered maps.
 */
@@ -8,7 +10,8 @@ L.Graticule = L.GeoJSON.extend({
             color: '#333',
             weight: 1
         },
-        interval: 20
+        intervalLat: 20 ,
+        intervalLng: 10
     },
 
     initialize: function (options) {
@@ -31,14 +34,14 @@ L.Graticule = L.GeoJSON.extend({
     },
 
     _getGraticule: function () {
-        var features = [], interval = this.options.interval;
+        var features = []; 
 
         // Meridians
-        for (var lng = 0; lng <= 180; lng = lng + interval) {
+        for (var lng = 0; lng <= 180; lng = lng + this.options.intervalLng) {
             features.push(this._getFeature(this._getMeridian(lng), {
-                "name": (lng) ? lng.toString() + "° E" : "Prime meridian"
+                "name": (lng) ? lng.toString() + "° E" : "0°"
             }));
-            if (lng !== 0) {
+            if (lng !== 0 && lng !== 180) {
                 features.push(this._getFeature(this._getMeridian(-lng), {
                     "name": lng.toString() + "° W"
                 }));
@@ -46,10 +49,10 @@ L.Graticule = L.GeoJSON.extend({
         }
 
         // Parallels
-        for (var lat = 0; lat <= 90; lat = lat + interval) {
-            features.push(this._getFeature(this._getParallel(lat), {
+        for (var lat = 40; lat <= 90; lat = lat + this.options.intervalLat) {
+            /*features.push(this._getFeature(this._getParallel(lat), {
                 "name": (lat) ? lat.toString() + "° N" : "Equator"
-            }));
+            }));*/
             if (lat !== 0) {
                 features.push(this._getFeature(this._getParallel(-lat), {
                     "name": lat.toString() + "° S"
@@ -66,7 +69,7 @@ L.Graticule = L.GeoJSON.extend({
     _getMeridian: function (lng) {
         lng = this._lngFix(lng);
         var coords = [];
-        for (var lat = -90; lat <= 90; lat++) {
+        for (var lat = -40; lat >= -90; lat--) {
             coords.push([lng, lat]);
         }
         return coords;

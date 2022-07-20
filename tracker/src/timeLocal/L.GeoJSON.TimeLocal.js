@@ -1,6 +1,7 @@
 import TimeLocal from './timeLocal.js' ;
 import './L.GeoJSON.Legend.js' ;
 
+
 /* class GeoJSON.Local
 aka L.GeoJSON.Local
 @ inherits L.GeoJSON
@@ -11,16 +12,19 @@ Options are unchanged from L.GeoJSON
 
 */
 L.GeoJSON.Local = L.GeoJSON.Legend.extend({
+
 	
 	initialize(path, options) {
+		
 		//fetch the layer and construct the layer, but asynchronous
 		this._initPromise = this.fetchJsonPromise(path)
 			.then(json => {
 				L.GeoJSON.Legend.prototype.initialize.call(this,json,options) ;
-			  } ) ;		
+			  } );		
 	} ,
 	
 	fetchJsonPromise(path) {
+		//fetch the file of interest
 		return fetch(path).then(response => response.json() ) ;
 	},
 	
@@ -28,7 +32,6 @@ L.GeoJSON.Local = L.GeoJSON.Legend.extend({
 		// check that the layer has initialized before adding layer.
 		this._initPromise
 			.then(layer => { L.GeoJSON.Legend.prototype.onAdd.call(this,map) } ) ;
-
 	}	
 
 }) 
@@ -82,7 +85,7 @@ L.GeoJSON.TimeLocal = L.GeoJSON.Local.extend({
 		this.clearLayers() ;
 				
 		this.fetchJsonPromise(
-			this.localUrl(dateObj.date)
+				this.localUrl(dateObj.date)
 			).then(iJson => this.addData(iJson)) ;
 	
 	}
