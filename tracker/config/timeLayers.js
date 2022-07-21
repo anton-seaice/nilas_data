@@ -1,4 +1,4 @@
-import {color} from './colorDefinitions.js'
+import {color} from './color.js'
 
 /*for each layer with a time domain, configure using the examples below options are passed as options to the initialize function of the class set zIndex as follows:
 	 zIndex: 1 (default) for baseLayers
@@ -20,15 +20,15 @@ export const timeLayers = {
 			layer: "MODIS_Aqua_CorrectedReflectance_TrueColor",
 			tileMatrixSet: "EPSG3031_250m",
 			format: "image%2Fjpeg",
-			tileSize: 512,
+			tileSize: 256, //512
 			subdomains: "abc",
 			noWrap: true,
 			continuousWorld: true,
 			attribution:"<a href='https://earthdata.nasa.gov/gibs'>NASA</a>",
 			zIndex:1,
 			freq:'daily',
-			zoomOffset:-1,
-			minNativeZoom: 1 ,
+			//zoomOffset:-1,
+			//minNativeZoom: 1 ,
 			//bounds: [[-43, -42.25],[-44, 135.0]] These don't work,
 			
 		}
@@ -72,7 +72,7 @@ export const timeLayers = {
 		options:{
 			opacity: 0.7, 
 			attribution: "Derived (<a href='https://nsidc.org/data/g02202'>1981-2010 Climatology</a>)",
-			alt: "Map of Sea Ice Concentration",
+			alt: "Map of Anomalies in Sea Ice Concentration ",
 			zIndex:3,
 			freq:'monthly',
 			legendUrl:'data/sea_ice_conc_anoms_legend.png'
@@ -116,12 +116,25 @@ export const timeLayers = {
 					`stroke:${color.meanContour80};stroke-width:3;stroke-dashArray:${color.meanDashArray}`
 					],
 				labels: [
-					'Mean 15% Concentration',
-					'Mean 80% Concentration'
+					'Monthly Mean 15% Concentration',
+					'Monthly Mean 80% Concentration'
 				]
 			}
 		}
-	},				
+	},
+	'Sea Ice Duration Anoms (Annual)':{
+		type: 'ImageOverlay' ,
+		filePath:'data/duration_anoms/' ,
+		fileExt:'.svg',
+		options:{
+			opacity: 0.5, 
+			attribution: "Derived (<a href='https://nsidc.org/data/g02202'>1981-2010 Climatology</a>)",
+			alt: "Map of Sea Ice Duration Anomalies",
+			zIndex:3,
+			freq:'yearly',
+			legendUrl:'data/sea_ice_dur_anoms_legend.png'
+		}
+	},		
 	'Chlorophyll Conc (Monthly)':{
 		type: 'ImageOverlay' ,
 		filePath:'data/chlor_conc/occci_chlor_conc_' ,
