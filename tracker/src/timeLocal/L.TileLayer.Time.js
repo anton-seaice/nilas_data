@@ -12,8 +12,10 @@ Options are unchanged from L.TileLayer
 L.TileLayer.Time = L.TileLayer.extend({
 	
 	onAdd: function(map) {
-		//grab the current date from the map
-		this.options.time=map.date  ;
+		
+		//corner-case: if the layer being added is higher freq than the current date picker, map-date may return a partial date, so extend it first.
+		const d = new Date(map.date);
+		this.options.time = d.toISOString().substr(0,10)  ;
 
 		console.debug(this.options) ;
 
@@ -45,8 +47,11 @@ L.TileLayer.WMS.Time = L.TileLayer.WMS.extend({
 	//untested!!
 	
 	onAdd: function(map) {
+		
+		//corner-case: if the layer being added is higher freq than the current date picker, map-date may return a partial date, so extend it first.
+		const d = new Date(map.date);
+		this.wmsParams.time = d.toISOString().substr(0,10)  ;
 
-		this.wmsParams.time=map.date ;
 		console.debug(this.wmsParams) ;
 		
 		// set up events

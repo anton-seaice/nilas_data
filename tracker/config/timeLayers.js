@@ -108,7 +108,7 @@ export const timeLayers = {
 			zIndex:4 ,
 			freq:'monthly mean', 
 			style: color.meanExtentFn,
-			attribution: "Ice Extent Derived from <a href='https://nsidc.org/data/g02202'>NSIDC CDR</a>",
+			attribution: "Derived <a href='https://nsidc.org/data/g02202'>1981-2010 Climatology</a>",
 			legend: {
 				type: 'line',
 				style: [
@@ -130,11 +130,37 @@ export const timeLayers = {
 			opacity: 0.5, 
 			attribution: "Derived (<a href='https://nsidc.org/data/g02202'>1981-2010 Climatology</a>)",
 			alt: "Map of Sea Ice Duration Anomalies",
-			zIndex:3,
+			zIndex: 3,
 			freq:'yearly',
-			legendUrl:'data/sea_ice_dur_anoms_legend.png'
+			legendUrl:'data/sea_ice_dur_anoms_legend.svg'
 		}
-	},		
+	},
+	'Sea Ice Advance Anoms (Annual)':{
+		type: 'ImageOverlay' ,
+		filePath:'data/advance_anoms/' ,
+		fileExt:'.svg',
+		options:{
+			opacity: 0.5, 
+			attribution: "Derived (<a href='https://nsidc.org/data/g02202'>1981-2010 Climatology</a>)",
+			alt: "Map of Sea Ice Advance Anomalies",
+			zIndex: 3,
+			freq:'yearly',
+			legendUrl:'data/sea_ice_adv_anoms_legend.svg'
+		}
+	},
+	'Sea Ice Retreat Anoms (Annual)':{
+		type: 'ImageOverlay' ,
+		filePath:'data/retreat_anoms/' ,
+		fileExt:'.svg',
+		options:{
+			opacity: 0.5, 
+			attribution: "Derived (<a href='https://nsidc.org/data/g02202'>1981-2010 Climatology</a>)",
+			alt: "Map of Sea Ice Retreat Anomalies",
+			zIndex: 3,
+			freq:'yearly',
+			legendUrl:'data/sea_ice_ret_anoms_legend.svg'
+		}
+	},	
 	'Chlorophyll Conc (Monthly)':{
 		type: 'ImageOverlay' ,
 		filePath:'data/chlor_conc/occci_chlor_conc_' ,

@@ -9,20 +9,27 @@ html,body{
 	height: 800px;
 }
 .date-control{
-	padding:8px;
-	background-color: rgba(0,0,0,1);
-	box-shadow: 0 0 15px rgba(0,0,0,1);
+	background-color: #f0f0f0;
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
 	border-radius: 5px;
+	max-height: 44px ;
+    padding: 5px ;
+}
+.date-control input{
+	float: right;
+	padding:5px;
 }
 .tracker-date{
 	font-size: 150% ;
+	padding: 10px ;
 }
 .legend-img{
 	backdrop-filter: blur(5px) ;
 	background-color: #f0f0f0;
 	box-shadow: 0 0 15px rgba(0,0,0,0.2);
 	border-radius: 5px;
-	width:120px
+	max-height:50% ;
+	
 }
 .legend-json {
     backdrop-filter: blur(5px) ;
@@ -37,8 +44,14 @@ html,body{
 }
 mouse-position{
 	backdrop-filter: blur(5px) ;
-    background-color: #f0f0f0;
+    background-color: #f0f0f0 ;
 	margin: 8;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
+}
+.leaflet-left.leaflet-bottom {
+	max-height: 75%
+}
+.leaflet-top {
+	max-height:25%
 }

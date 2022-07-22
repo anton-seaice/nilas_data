@@ -41,13 +41,23 @@ export var staticLayers = {
         intervalLng: 30,
 		onEachFeature: function (feature, layer) {
 			if (feature.properties.name.match('E')) {
-				var orient = 180 ; 
-			} else {var orient = 0};
-        	
-        	layer.setText(
-        		feature.properties.name,
-        		{center:true, offset:-3, orientation:orient}
-        	);
+				layer.setText(
+					feature.properties.name,
+					{offset:-3, orientation:180}
+				);
+			} else if (feature.properties.name.match('S')) {
+				layer.setText(
+					feature.properties.name,
+					{center: true, offset:-3}
+				);
+			} else {
+				layer.setText(
+					feature.properties.name,
+					{//center:true, 
+						offset:-3, orientation:0, 
+					}
+				);
+			}
         }
     } ,
 	

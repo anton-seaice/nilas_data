@@ -39,15 +39,14 @@ L.Control.Date=L.Control.extend({
 		map.date = myDate.toISOString().substr(0, 10) ;
 				
 		// make a div to put the input in
-		this._container=L.DomUtil.create('form', 'date-control') ;
+		this._container=L.DomUtil.create('form', 'date-control leaflet-control') ;
 		
 		// make the input element
 		this._dateInput=L.DomUtil.create('input','tracker-date',this._container) ;
 		
 		// as a fall back, create a daily date picker. Specifying an option: {freq:'daily'/'monthly'/'yearly'} for each layer is better.
 		this._dateInput.setAttribute('value',map.date) ;
-		this._setPicker('daily') ;
-		this._freq='daily' ;
+		this._setPicker(this.options.freq) ;
 		
 		// set up an event listener for when an layer is added
 		map.on('layeradd', this._layerChange, map) ;
