@@ -1,3 +1,13 @@
+Update NodeJs
+
+Download from https://nodejs.org/en/download/
+
+Unpack and install into /usr/local/lib
+
+Add to ~/.profile
+
+$ export PATH=/usr/local/lib/node-v16.16.0-linux-x64/bin:$PATH
+
 To use:
 
 $ npm install
