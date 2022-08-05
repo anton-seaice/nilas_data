@@ -34,7 +34,7 @@ function init() {
 	
 	// position display
 	L.control.position().addTo(map) ;
-		
+
 	//add a layer selector
 	let layerControl = L.control.layers(null,null).addTo(map) ;  //we may need to write a function to style layers by our desires
 	//layerControl.expand() ;
@@ -48,7 +48,10 @@ function init() {
 	//ship track:
 	let shipLayer=L.geoJSON.local(staticLayers.shiptrack.url, staticLayers.shiptrack.opts) ;
 	layerControl.addOverlay(shipLayer, staticLayers.shiptrack.name ) ;
-				
+
+	// add scale                                                                                                │
+	L.control.scale({imperial:false, position:'bottomright'}).addTo(map);
+
 	//Make the time dependent layers
 	console.log("Loading Time Layers") ;
 	console.debug(timeLayers) ;

@@ -6,9 +6,9 @@ Unpack and install into /usr/local/lib
 
 Add to ~/.profile
 
-$ export PATH=/usr/local/lib/node-v16.16.0-linux-x64/bin:$PATH
+PATH=/usr/local/lib/node-v16.16.0-linux-x64/bin:$PATH
 
-To use:
+To use (from within tracker dir):
 
 $ npm install
 
