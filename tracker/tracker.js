@@ -93,6 +93,7 @@ function init() {
 		if (mapLayer) {
 			layerControl.addOverlay(mapLayer, iKey) ;
 			if (iLayer.showAtOpen) { mapLayer.addTo(map) ; } ;
+			mapLayer.name = iKey ;
 			mapLayer=null ;
 		}
 		

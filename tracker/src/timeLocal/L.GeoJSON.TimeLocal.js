@@ -13,11 +13,21 @@ Options are unchanged from L.GeoJSON
 */
 L.GeoJSON.Local = L.GeoJSON.Legend.extend({
 
+	_errorJson: { "type": "FeatureCollection",
+		"features": [
+			{ 
+				"type": "Feature",
+				"geometry": { "type": "Point",  "coordinates": [0, -90] },
+				"properties": { "error": "No Data" }
+			}
+		]
+	} ,
 	
 	initialize(path, options) {
 		
 		//fetch the layer and construct the layer, but asynchronous
 		this._initPromise = this.fetchJsonPromise(path)
+			.catch(error => {return this._errorJson})
 			.then(json => {
 				L.GeoJSON.Legend.prototype.initialize.call(this,json,options) ;
 			  } );		
@@ -25,14 +35,19 @@ L.GeoJSON.Local = L.GeoJSON.Legend.extend({
 	
 	fetchJsonPromise(path) {
 		//fetch the file of interest
-		return fetch(path).then(response => response.json() ) ;
+		let promise = fetch(path).
+			then(response => response.json() ) 
+			
+		
+		return promise ;
 	},
 	
 	onAdd(map) {
 		// check that the layer has initialized before adding layer.
 		this._initPromise
 			.then(layer => { L.GeoJSON.Legend.prototype.onAdd.call(this,map) } ) ;
-	}	
+	},
+	
 
 }) 
 
@@ -86,7 +101,15 @@ L.GeoJSON.TimeLocal = L.GeoJSON.Local.extend({
 				
 		this.fetchJsonPromise(
 				this.localUrl(dateObj.date)
-			).then(iJson => this.addData(iJson)) ;
+			).catch(error => {
+				console.debug(`No ${this.name} for this date`) ;
+				return this._errorJson ;
+				})
+			.then(iJson => {
+				//console.debug(iJson) ;
+				this.addData(iJson) ;
+				}) ;
+			
 	
 	}
 	

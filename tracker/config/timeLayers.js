@@ -30,7 +30,6 @@ export const timeLayers = {
 			//zoomOffset:-1,
 			//minNativeZoom: 1 ,
 			//bounds: [[-43, -42.25],[-44, 135.0]] These don't work,
-			
 		}
 	},
 	'Sea Ice Conc High Res (Daily)':{
@@ -42,6 +41,7 @@ export const timeLayers = {
 			attribution: "<a href='https://seaice.uni-bremen.de/sea-ice-concentration/amsre-amsr2/'>AMSR2</a>",
 			zIndex:2,
 			freq:'daily',
+			alt:'No data for Sea Ice Conc High Res (Daily) on this date',
 			legendUrl:'data/sea_ice_conc_legend.png'
 		}
 	},
@@ -61,6 +61,7 @@ export const timeLayers = {
 			zIndex:2,
 			//used by L.ImageOverlay.TileLocal extension :
 			freq:'monthly',
+			alt:'No data for Sea Ice Conc (Monthly) on this date',
 			//used by L.ImageOverlay.Legend extension :
 			legendUrl:'data/sea_ice_conc_legend.png'
 		} 
@@ -75,6 +76,7 @@ export const timeLayers = {
 			alt: "Map of Anomalies in Sea Ice Concentration ",
 			zIndex:3,
 			freq:'monthly',
+			alt:'No data for Sea Ice Conc (Monthly) on this month',
 			legendUrl:'data/sea_ice_conc_anoms_legend.png'
 		}
 	},
@@ -85,7 +87,8 @@ export const timeLayers = {
 		options: {
 			zIndex:4 ,
 			freq:'monthly', 
-			style: color.iceExtentFn,
+			style: color.iceExtentFn , //styles normal contour lines
+			pointToLayer: color.iceExtentError , //styles error points
 			attribution: "Ice Extent Derived from <a href='https://nsidc.org/data/g02202'>NSIDC CDR</a>",
 			legend: {
 				type: 'line',
@@ -129,9 +132,9 @@ export const timeLayers = {
 		options:{
 			opacity: 0.5, 
 			attribution: "Derived (<a href='https://nsidc.org/data/g02202'>1981-2010 Climatology</a>)",
-			alt: "Map of Sea Ice Duration Anomalies",
 			zIndex: 3,
 			freq:'yearly',
+			alt:'No data for Sea Ice Duration for this year',
 			legendUrl:'data/sea_ice_dur_anoms_legend.svg'
 		}
 	},
@@ -142,9 +145,9 @@ export const timeLayers = {
 		options:{
 			opacity: 0.5, 
 			attribution: "Derived (<a href='https://nsidc.org/data/g02202'>1981-2010 Climatology</a>)",
-			alt: "Map of Sea Ice Advance Anomalies",
 			zIndex: 3,
 			freq:'yearly',
+			alt:'No data for Sea Ice Advance for this year',
 			legendUrl:'data/sea_ice_adv_anoms_legend.svg'
 		}
 	},
@@ -158,6 +161,7 @@ export const timeLayers = {
 			alt: "Map of Sea Ice Retreat Anomalies",
 			zIndex: 3,
 			freq:'yearly',
+			alt:'No data for Sea Ice Retreat for this year',
 			legendUrl:'data/sea_ice_ret_anoms_legend.svg'
 		}
 	},	
@@ -169,9 +173,9 @@ export const timeLayers = {
 		options:{
 			opacity: 1, 
 			attribution: "<a href='https://www.oceancolour.org/'>Ocean Colour - CCI</a>",
-			alt: "Map of Chlorophyll Concentration",
 			zIndex:2,
 			freq:'monthly',
+			alt:'No data for Chlorophyll Conc for this month',
 			legendUrl:'data/chlor_conc_legend.png'
 		}
 	},
@@ -183,9 +187,9 @@ export const timeLayers = {
 		options:{
 			opacity: 1, 
 			attribution: "Derived <a href='https://www.oceancolour.org/'>1998-2020 Climatology</a>)",
-			alt: "Map of Chlorophyll Concentration Anomalies",
 			zIndex:3,
 			freq:'monthly',
+			alt:'No data for Chlorophyll Conc for this month',
 			legendUrl:'data/chlor_conc_anoms_legend.png'
 		}
 	}
