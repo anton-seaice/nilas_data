@@ -20,7 +20,7 @@ This folder contains python modules, functions and classes that can be used to c
 
 All python dependencies to use this code in jupyterlab are in ENV.yaml. It's faster to use the mamba package manager, although conda should also work:
 
->mamba create env -n sea-ice-tracker --file ENV.yml
+>mamba env create -n sea-ice-tracker --file ENV.yml
 
 To update:
 
