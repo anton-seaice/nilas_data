@@ -1,8 +1,0 @@
-4/7/22
-
-This does work:
-
-- I hacked the L.TimeDimension.Layer.wms._createLayerForTime function to produce the date format that PolarView expects for a wms layer. (Not sure why I needed to do this, maybe polarview is not standards compliant?)
-- I dont really like the slider / date format, and there's no functionality to change the time interval on the fly, so it still needs a fair bit of work.
-
-It does however have caching and forward/back buttons, which are handy.

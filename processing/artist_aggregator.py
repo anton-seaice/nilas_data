@@ -10,7 +10,6 @@ import sys
 import os
 import pandas as pd
 import numpy as np
-# import rioxarray
 import pdb
 from tqdm.auto import tqdm
 
@@ -76,7 +75,8 @@ ds = xr.concat([xr.open_dataset(i) for i in tqdm(file_list)],
 ds = ds.drop('polar_stereographic')
 # Rename the variable to a more useful name
 ds = ds.rename({'z': 'conc'})
-
+ds['conc'].attrs['units'] = '%'
+ds['conc'].attrs['standard_name'] = 'sea_ice_concentration'
 # create monthly data
 print("Monthly resampling")
 monthly_resample = ds.resample(time="M").mean(keep_attrs=True)
