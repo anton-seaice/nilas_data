@@ -33,3 +33,8 @@ done
 for y in $YEARS;
 do wget -A "*sh*.nc" -r -cN -nd --user anonymous ftp://osisaf.met.no/archive/ice/drift_lr/merged/$y/ -P /g/data/jk72/MIZ/OSI-SAF/drift_lr/;
 done
+
+#Copernicus OSTIA SST
+for y in $YEARS;
+do wget -r -cN -nd --user asteketee --password hlJSYzA505XD ftp://nrt.cmems-du.eu/Core/SST_GLO_SST_L4_NRT_OBSERVATIONS_010_001/METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2/$y/ -P /g/data/jk72/MIZ/CMEMS/OSTIA-NRT ;
+done

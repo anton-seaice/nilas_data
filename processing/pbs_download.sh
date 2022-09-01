@@ -4,8 +4,8 @@
 #PBS -M anton.steketee@aad.gov.au
 #PBS -m ae
 #PBS -q copyq
-#PBS -o /g/data/jk72/MIZ/dl_logs
-#PBS -e /g/data/jk72/MIZ/dl_logs
+#PBS -o /g/data/jk72/MIZ/archive/dl_logs
+#PBS -e /g/data/jk72/MIZ/archive/dl_logs
 #PBS -W umask=0022
 #PBS -l walltime=2:00:00
 

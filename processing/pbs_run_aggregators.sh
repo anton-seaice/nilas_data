@@ -4,8 +4,8 @@
 #PBS -M anton.steketee@aad.gov.au
 #PBS -m ae
 #PBS -q normal
-#PBS -o /g/data/jk72/MIZ/aggregator_logs
-#PBS -e /g/data/jk72/MIZ/aggregator_logs
+#PBS -o /g/data/jk72/MIZ/archive/aggregator_logs
+#PBS -e /g/data/jk72/MIZ/archive/aggregator_logs
 #PBS -W umask=0022
 #PBS -l ncpus=16
 #PBS -l mem=48gb
