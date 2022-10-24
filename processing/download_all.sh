@@ -13,12 +13,20 @@ wget --ftp-user=anonymous -r -cN -nd ftp://sidads.colorado.edu/DATASETS/NOAA/G02
 # NSIDC Supporting Info (area of pixels)
 wget --ftp-user=anonymous -r -cN -nd ftp://sidads.colorado.edu/DATASETS/seaice/polar-stereo/tools/pss25area_v3.dat -P /g/data/jk72/MIZ/NSIDC/
 
-#Bremen ARTIST
+#Bremen ARTIST 6.25k
 wget -A "5.4.nc" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/netcdf/ -P /g/data/jk72/MIZ/Bremen/netcdf
 
 for y in $(seq 2012 20$(date +%y));
 do for m in jan feb mar apr may jun jul aug sep oct nov dec;
 do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P /g/data/jk72/MIZ/Bremen/geotiff;
+done;
+done
+
+#Bremen ARTIST 3.125k
+
+for y in $(seq 2012 20$(date +%y));
+do for m in jan feb mar apr may jun jul aug sep oct nov dec;
+do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s3125/$y/$m/Antarctic3125/ -P /g/data/jk72/MIZ/Bremen/3125/;
 done;
 done
 
