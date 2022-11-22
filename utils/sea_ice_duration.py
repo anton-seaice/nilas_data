@@ -109,7 +109,7 @@ class sea_ice_duration:
         )
 
         self.ret_day_ds=self.da.groupby_bins(
-            'time',self.year_bins[:-1], labels=self.year_labels[:-1] #drop the last year because it is incomplete
+            'time',self.year_bins, labels=self.year_labels #drop the last year because it is incomplete
         ).apply(self._day_of_retreat).rename({'time_bins':'year'})
 
         self.duration_da=self.ret_day_ds.index-self.adv_day_ds.index
