@@ -6,6 +6,8 @@
 #PBS -q copyq
 #PBS -W umask=0022
 #PBS -l wd
+#PBS -o /g/data/jk72/MIZ/archive/dl_logs
+#PBS -e /g/data/jk72/MIZ/archive/dl_logs
 
 WORK_DIR=/g/data/jk72/as2285/miz/processing/tracker_data
 DATA_DIR=/g/data/jk72/MIZ
@@ -19,9 +21,9 @@ YEARS=$(seq 2022 20$(date +%y))
 
 #Bremen 
 
-for y in $YEARS
+# for y in $YEARS
 do for m in jan feb mar apr may jun jul aug sep oct nov dec
-do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $BREMEN_DIR 
+# do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $BREMEN_DIR 
 done
 done
 
@@ -35,24 +37,43 @@ START_DATE=$(ls -l $NSIDC_DIR | tail -n 1 | grep -oP '\d{8}') #Get the date (fro
 wget --ftp-user=anonymous -r -cN -nd ftp://sidads.colorado.edu/DATASETS/NOAA/G10016_V2/south/daily/ -P $NSIDC_DIR
 
 #Find all the files that have dates modified since the start_date (which is a little bit lazy because the modified date is always a few days after the date in the filename)
-FILES=$(find $NSIDC_DIR -type f -newermt $START_DATE)
+NEW_FILES=$(find $NSIDC_DIR -type f -newermt $START_DATE)
 
 echo "New Files -------------------"
-echo $FILES
+echo $NEW_FILES
 
 MONTHS=()
-for iFile in $FILES; do
+for iFile in $NEW_FILES; do
 MONTHS+=($(date --date=$(echo $iFile | grep -oP '\d{8}') "+%Y%m"))
 done
 
 UNIQUE_MONTHS=$(echo ${MONTHS[@]} | tr ' ' '\n' | sort -u)
 
-FILES=()
+MONTHLY_FILES=()
 for iMonth in $UNIQUE_MONTHS; do
-FILES+=($(ls -d  $NSIDC_DIR* | grep $iMonth))
+MONTHLY_FILES+=($(ls -d  $NSIDC_DIR* | grep $iMonth))
 done
 
 # FINISH_DATE=$(ll | tail -n 1 | grep -oP '\d{8}')
 
-qsub -- $WORK_DIR/pbs_run_daily_nsidc.sh ${FILES[@]}
+# Park these files somewhere handy that can be accessed easily
+echo ${MONTHLY_FILES[@]} > $WORK_DIR/monthly_files.text
 
+# To process we need to start a different job, to move from copyq to normal, and it can then open the monthly_files.text
+qsub $WORK_DIR/pbs_run_monthly_nsidc.sh 
+
+YEARS=()
+for iFile in $NEW_FILES; do
+DATE_YEAR=($(date --date=$(echo $iFile | grep -oP '\d{8}') "+%Y"))
+DATE_MONTH=($(date --date=$(echo $iFile | grep -oP '\d{8}') "+%m"))
+DATE_DAY=($(date --date=$(echo $iFile | grep -oP '\d{8}') "+%d"))
+if [[ "$DATE_MONTH" -ge 2 ]] && [[ "$DATE_DAY" -gt 15 ]]
+then
+    YEARS+=$DATE_YEAR
+else 
+    YEARS+=$DATE_YEAR-1
+fi
+
+done
+
+UNIQUE_YEARS=$(echo ${YEARS[@]} | tr ' ' '\n' | sort -u)
