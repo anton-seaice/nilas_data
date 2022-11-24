@@ -64,10 +64,12 @@ try:
     #monthly anoms to geotiff
     try:
         anoms_da=monthly_da.groupby('time.month')-climat_ds.ave
+        
+        anoms_filt_da=100*ant_conc.anoms_da.where((ant_conc.anoms_da>=.075)+(ant_conc.anoms_da<=-.075))
 
         for iTime in datetimes_xr:
             
-            write_cog(100*anoms_da.sel(time=iTime), #consistent 0-100 scale to give %
+            write_cog(anoms_filt_da.sel(time=iTime), #consistent 0-100 scale to give %
                 f'{_data_dir}tracker_data/sea_ice_conc_anoms_25km_cog/nsidc_sea_ice_conc_{iTime.dt.year.values}_{iTime.dt.month.values}.tiff',
                 overwrite=True,
                 overview_levels=[2,4,8,16,32]
