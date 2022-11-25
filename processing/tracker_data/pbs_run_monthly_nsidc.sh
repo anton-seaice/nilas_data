@@ -2,7 +2,7 @@
 #PBS -l storage=gdata/jk72
 #PBS -M anton.steketee@aad.gov.au
 #PBS -m ae
-#PBS -q express
+#PBS -q normal
 #PBS -W umask=0022
 #PBS -l ncpus=4
 #PBS -l mem=24gb
@@ -11,7 +11,6 @@
 #PBS -e /g/data/jk72/MIZ/archive/dl_logs
 
 WORK_DIR=/g/data/jk72/as2285/miz/processing/tracker_data
-$WORK_DIR/monthly_files.text
 
 umask 0003
 

@@ -21,9 +21,9 @@ YEARS=$(seq 2022 20$(date +%y))
 
 #Bremen 
 
-# for y in $YEARS
+for y in $YEARS
 do for m in jan feb mar apr may jun jul aug sep oct nov dec
-# do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $BREMEN_DIR 
+do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $BREMEN_DIR 
 done
 done
 
