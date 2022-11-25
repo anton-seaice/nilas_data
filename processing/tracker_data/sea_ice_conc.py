@@ -65,7 +65,7 @@ try:
     try:
         anoms_da=monthly_da.groupby('time.month')-climat_ds.ave
         
-        anoms_filt_da=100*ant_conc.anoms_da.where((ant_conc.anoms_da>=.075)+(ant_conc.anoms_da<=-.075))
+        anoms_filt_da=100*anoms_da.where((anoms_da>=.075)+(anoms_da<=-.075))
 
         for iTime in datetimes_xr:
             
