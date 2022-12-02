@@ -39,7 +39,7 @@ class sea_ice_duration:
 
         years=np.arange(first_year,current_year+2,1) #ints for the years
         self.year_bins=np.array([np.datetime64(str(iYear)+'-02-15') for iYear in years]) #use years to make full dates for 15 Feb
-        self.year_labels=[iYear for iYear in years[0:-1]] # labels are the start year of the year starting 15 Feb / ending 14 feb
+        self.year_labels=years[0:-1] # labels are the start year of the year starting 15 Feb / ending 14 feb
 
     # Functions to find advance day and retreat day
     """We need a function to find:
@@ -51,7 +51,7 @@ class sea_ice_duration:
 
     def _day_of_advance(self,da):
         # find times when the concentration for 5 days is >=0.15
-        has_ice_da=((da>=self.conc_range[0]).rolling(time=5).mean('time')==1)
+        has_ice_da=((da>=self.conc_range[0]).rolling(time=5).sum('time')==5)
 
         # day of advance is the first day when has_ice is true
         advance_day_da=has_ice_da.idxmax(dim='time').where( #idxmax returns first time when true is found
@@ -67,7 +67,7 @@ class sea_ice_duration:
 
     def _day_of_retreat(self,da):
         # find times when the concentration for 5 days is >=0.15, i.e. year has some sea-ice
-        has_ice_da=((da>=self.conc_range[0]).rolling(time=5).mean('time')==1)
+        has_ice_da=((da>=self.conc_range[0]).rolling(time=5).sum('time')==5)
 
         # criteria for end of sea ice
         no_ice_da=(da>=self.conc_range[0])
@@ -109,7 +109,7 @@ class sea_ice_duration:
         )
 
         self.ret_day_ds=self.da.groupby_bins(
-            'time',self.year_bins, labels=self.year_labels #drop the last year because it is incomplete
+            'time',self.year_bins[:-1], labels=self.year_labels[:-1] #drop the last year because it is incomplete
         ).apply(self._day_of_retreat).rename({'time_bins':'year'})
 
         self.duration_da=self.ret_day_ds.index-self.adv_day_ds.index
