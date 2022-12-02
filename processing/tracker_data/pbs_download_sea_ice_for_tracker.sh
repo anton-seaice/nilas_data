@@ -1,17 +1,17 @@
 #!/bin/bash
 #PBS -P gv90
-#PBS -l storage=gdata/jk72
+#PBS -l storage=gdata/gv90
 #PBS -M anton.steketee@aad.gov.au
 #PBS -m ae
 #PBS -q copyq
 #PBS -W umask=0022
 #PBS -l wd
-#PBS -o /g/data/jk72/MIZ/archive/dl_logs
-#PBS -e /g/data/jk72/MIZ/archive/dl_logs
+#PBS -o /g/data/gv90/P6_data/dl_logs
+#PBS -e /g/data/gv90/P6_data/dl_logs
 
-WORK_DIR=/g/data/jk72/as2285/miz/processing/tracker_data
-DATA_DIR=/g/data/jk72/MIZ
-BREMEN_DIR=$DATA_DIR/Bremen/6km/geotiff
+WORK_DIR=/g/data/gv90/as2285/miz/processing/tracker_data
+DATA_DIR=/g/data/gv90/P6_data
+BREMEN_DIR=$DATA_DIR/Bremen
 NSIDC_DIR=$DATA_DIR/NSIDC/G10016_V2/daily/
 
 umask 0003
@@ -23,11 +23,20 @@ YEARS=$(seq 2022 20$(date +%y))
 
 for y in $YEARS
 do for m in jan feb mar apr may jun jul aug sep oct nov dec
-do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $BREMEN_DIR 
+do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $BREMEN_DIR/6km/geotiff 
 done
 done
 
+#Bremen ARTIST 3.125k
+for y in $YEARS;
+do for m in jan feb mar apr may jun jul aug sep oct nov dec;
+do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s3125/$y/$m/Antarctic3125/ -P /g/data/jk72/MIZ/Bremen/3km/geotiff;
+done;
+done
+
 #No Processing to do on these at this stage.
+
+rsync $BREMEN_DIR/* $DATA_DIR/
 
 # And the NSIDC data
 

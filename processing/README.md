@@ -1,10 +1,7 @@
 This folder is for downloading and preliminary processing of data:
 
-download_once.sh is for an initial download of all datasets on a new server / working environment
-download_daily.sh is to be run regularly to capture any new / updated data
+download_once.sh is for an initial download of all datasets on a new server / working environment, and a record of the downloads made.
 
-pbs_download.sh is the script to be used with the PBS scheduler to automate the downloads.
+pbs_download_daily.sh is the script to be used with the PBS scheduler to automate the downloads and processing of datasets which are updated regularly.
 
-artist_aggregator.py does initial/pre-processing on Bremen ARTIST sea ice conc data
-
-
+tracker_data has scripts called by pbs_download_daily.sh for updating the tracker_data folder with new cogs/jsons
