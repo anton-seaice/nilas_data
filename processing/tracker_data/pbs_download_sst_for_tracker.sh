@@ -10,7 +10,7 @@
 #PBS -e /g/data/gv90/P6_data/dl_logs
 
 WORK_DIR=/g/data/gv90/as2285/miz/processing/tracker_data
-DATA_DIR=/g/data/gv90/MIZ
+DATA_DIR=/g/data/gv90/P6_data
 OSTIA_DIR=$DATA_DIR/CMEMS/OSTIA-NRT
 
 umask 0003
