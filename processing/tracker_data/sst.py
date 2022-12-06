@@ -17,7 +17,8 @@ from sys import argv
 #sys.path.append(_work_dir)
 #from utils.climat import climatology
 try:
-    sst_daily_ds=xr.open_mfdataset(argv[1:], parallel=True)
+    
+    sst_daily_ds=xr.open_mfdataset(argv[1:])
     sst_daily_da=(sst_daily_ds.analysed_sst-273.15)
     sst_monthly_da=sst_daily_da.resample(time="M").mean('time')
 
