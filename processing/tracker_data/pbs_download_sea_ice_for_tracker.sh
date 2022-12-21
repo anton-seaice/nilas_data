@@ -71,18 +71,18 @@ echo ${MONTHLY_FILES[@]} > $WORK_DIR/monthly_files.text
 # To process we need to start a different job, to move from copyq to normal, and it can then open the monthly_files.text
 qsub $WORK_DIR/pbs_run_monthly_nsidc.sh 
 
-YEARS=()
-for iFile in $NEW_FILES; do
-DATE_YEAR=($(date --date=$(echo $iFile | grep -oP '\d{8}') "+%Y"))
-DATE_MONTH=($(date --date=$(echo $iFile | grep -oP '\d{8}') "+%m"))
-DATE_DAY=($(date --date=$(echo $iFile | grep -oP '\d{8}') "+%d"))
-if [[ "$DATE_MONTH" -ge 2 ]] && [[ "$DATE_DAY" -gt 15 ]]
-then
-    YEARS+=$DATE_YEAR
-else 
-    YEARS+=$DATE_YEAR-1
-fi
+# YEARS=()
+# for iFile in $NEW_FILES; do
+# DATE_YEAR=($(date --date=$(echo $iFile | grep -oP '\d{8}') "+%Y"))
+# DATE_MONTH=($(date --date=$(echo $iFile | grep -oP '\d{8}') "+%m"))
+# DATE_DAY=($(date --date=$(echo $iFile | grep -oP '\d{8}') "+%d"))
+# if [[ "$DATE_MONTH" -ge 2 ]] && [[ "$DATE_DAY" -gt 15 ]]
+# then
+#     YEARS+=$DATE_YEAR
+# else 
+#     YEARS+=$DATE_YEAR-1
+# fi
 
-done
+# done
 
-UNIQUE_YEARS=$(echo ${YEARS[@]} | tr ' ' '\n' | sort -u)
+# UNIQUE_YEARS=$(echo ${YEARS[@]} | tr ' ' '\n' | sort -u)

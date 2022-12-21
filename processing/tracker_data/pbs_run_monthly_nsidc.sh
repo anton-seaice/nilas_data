@@ -4,8 +4,8 @@
 #PBS -m ae
 #PBS -q normal
 #PBS -W umask=0022
-#PBS -l ncpus=4
-#PBS -l mem=24gb
+#PBS -l ncpus=1
+#PBS -l mem=4gb
 #PBS -l walltime=24:00:00
 #PBS -o /g/data/gv90/P6_data/dl_logs
 #PBS -e /g/data/gv90/P6_data/dl_logs
