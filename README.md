@@ -8,6 +8,26 @@ We intend for these tools and workflows to persist beyond the study such that th
 
 The Jupyter notebooks are for the interactive generation and visualisation of climatologies primarily relating to Antarctic sea-ice.
 
+## Tracker_Data
+
+The jupyter notebooks are for the generation of source files (principally geotiff and geojson) used by the Sea-Ice Tracker. The notebooks contain code to generate figures in other ways, but these are mostly moved to the bottom of the file. These were run once for the initial generation of data, and can be re-run later.
+
+The following layers are updated irregularly:
+
+- Sea Ice Timing (annual after 15th Feb)
+- Chlorophyll (approx every 6 months)
+- Freeboard (timing ?)
+- Sea Ice Extent (Long Term Monthly Mean) (doesn't change)
+- Bathymetry (a few years?)
+
+These layers are updated daily, and there are automated script for daily updates in the `processing/tracker_data` folder:
+
+- Sea Ice Concentration
+- Sea Ice Extent (Monthly Mean)
+- Sea Surface Temperature
+
+
+
 ## Processing
 
 This folder contains python and bash scripts for downloading and aggregating data.
