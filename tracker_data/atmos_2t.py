@@ -17,11 +17,10 @@ from utils.climat import climatology
 
 from glob import iglob 
 
-for iVar in ['mn2t',
-    'mx2t', 
-    #'2t'
+for iVar in [#'mn2t',
+    #'mx2t', 
+    '2t' 
 ]:
-    # files = !ls -d {_data_dir}/{iVar}/*/*.nc
     files=list()
     for iFile in iglob(f'{_data_dir}/{iVar}/*/*.nc', recursive=True):
         files.append(iFile)
@@ -31,15 +30,15 @@ for iVar in ['mn2t',
     temp_ds=temp_ds.where(temp_ds.latitude<-35, drop=True)
 
     match iVar:
-        case 'mn2t':
-            temp_da=temp_ds[iVar].resample(time='D').min('time')-273.15
-        case 'mx2t':
-            temp_da=temp_ds[iVar].resample(time='D').max('time')-273.15
+        # (daily processing produced too much data - 90GB per dataset
+        # case 'mn2t':
+        #     temp_da=temp_ds[iVar].resample(time='D').min('time')-273.15
+        # case 'mx2t':
+        #     temp_da=temp_ds[iVar].resample(time='D').max('time')-273.15
         case '2t':
             temp_da=temp_ds['t2m'].resample(time='M').mean('time')-273.15
 
     ## Map GeoBoxes
-
     temp_da=temp_da.odc.assign_crs("epsg:4326")
 
     src_geobox=temp_da.odc.geobox
@@ -53,7 +52,7 @@ for iVar in ['mn2t',
 
     ## Temperature Map Files
 
-    START_YEAR='1980'
+    START_YEAR='2022'
 
     datetimes_xr=temp_da.sel(time=slice(START_YEAR,'2050')).time
 

@@ -26,7 +26,7 @@ for iVar in ['msl']:
     
     temp_ds=temp_ds.where(temp_ds.latitude<-40, drop=True)
     
-    temp_ds=temp_ds.where(temp_ds.time.dt.year>=1995, drop=True)
+    temp_ds=temp_ds.where(temp_ds.time.dt.year>=2022, drop=True)
 
     temp_da=temp_ds[iVar].resample(time='D').mean('time')/100 #hectoPascals
     
