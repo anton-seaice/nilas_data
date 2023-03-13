@@ -17,7 +17,7 @@ NSIDC_DIR=$DATA_DIR/NSIDC/G10016_V2/daily/
 umask 0003
 
 #This file checks all data from 2022 to the current year to see if it has changed or if there are new files since the last download.
-YEARS=$(seq 2022 20$(date +%y))
+YEARS=$(seq 2023 20$(date +%y))
 
 #Bremen 
 
