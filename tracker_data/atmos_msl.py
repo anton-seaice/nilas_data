@@ -1,9 +1,13 @@
+# Process ERA5 sea-level pressure (replicated in rt52 project), to daily pressure maps for the southern ocean (to use in Nilas).
+# Input is hourly ERA5 data as netcdf, out put is geojson files with daily sea level pressure
+
+# for output files, which year to start at
+START_YEAR='2022'
+
 #directory paths
 _work_dir='/g/data/gv90/as2285/miz/'
 _data_dir='/g/data/rt52/era5/single-levels/reanalysis/'
 _output_data_dir='/g/data/gv90/P6_data/'
-
-MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 #useful py libraries
 import xarray as xr
@@ -11,9 +15,7 @@ import numpy as np
 import odc.geo.xr
 from dea_tools.spatial import subpixel_contours
 from affine import Affine
-
 from topojson import Topology
-
 from glob import iglob 
 
 for iVar in ['msl']:
@@ -26,7 +28,7 @@ for iVar in ['msl']:
     
     temp_ds=temp_ds.where(temp_ds.latitude<-40, drop=True)
     
-    temp_ds=temp_ds.where(temp_ds.time.dt.year>=2022, drop=True)
+    temp_ds=temp_ds.where(temp_ds.time.dt.year>=int(START_YEAR), drop=True)
 
     temp_da=temp_ds[iVar].resample(time='D').mean('time')/100 #hectoPascals
     
@@ -38,8 +40,9 @@ for iVar in ['msl']:
 
         lines=subpixel_contours(
             loaded, 
-            z_values=np.arange(800,1201,10)
-            , min_vertices=15, crs='epsg:4326'
+            z_values=np.arange(800,1201,10),
+            min_vertices=15, 
+            crs='epsg:4326'
         )
 
         Topology(lines.explode(index_parts=False)).to_json(
