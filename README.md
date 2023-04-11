@@ -12,7 +12,7 @@ These Jupyter notebooks are for the interactive generation and visualisation of 
 
 ## Tracker_Data
 
-The jupyter notebooks are for the generation of source files (principally geotiff and geojson) used by Nilas (the Sea-Ice Tracker). The notebooks contain code to generate figures in other ways, but these are mostly moved to the bottom of the file. These were run once for the initial generation of data, and can be re-run later.
+These are for the generation of source data files (principally geotiff and geojson) used by Nilas (the Sea-Ice Tracker). These were run once for the initial generation of data, and can be re-run later.
 
 The following layers are updated irregularly:
 
