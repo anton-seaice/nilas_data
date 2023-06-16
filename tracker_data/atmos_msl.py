@@ -21,7 +21,7 @@ from glob import iglob
 for iVar in ['msl']:
     
     files=list()
-    for iFile in iglob(f'{_data_dir}/{iVar}/*/*.nc', recursive=True):
+    for iFile in iglob(f'{_data_dir}/{iVar}/202[2-3]/*.nc', recursive=True):
         files.append(iFile)
 
     temp_ds=xr.open_mfdataset(files, chunks='auto')

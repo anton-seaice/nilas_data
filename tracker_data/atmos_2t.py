@@ -25,7 +25,7 @@ for iVar in [#'mn2t', #minimum temp
     '2t' #mean temp
 ]:
     files=list()
-    for iFile in iglob(f'{_data_dir}/{iVar}/*/*.nc', recursive=True):
+    for iFile in iglob(f'{_data_dir}/{iVar}/202[2-3]/*.nc', recursive=True):
         files.append(iFile)
 
     temp_ds=xr.open_mfdataset(files) #, parallel=True)
