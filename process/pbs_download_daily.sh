@@ -29,4 +29,7 @@ qsub $WORK_DIR/tracker_data/pbs_download_sea_ice_for_tracker.sh
 
 qsub $WORK_DIR/tracker_data/pbs_download_sst_for_tracker.sh
 
+qsub $WORK_DIR/tracker_data/pbs_run_atmos_2t.sh
+
+qsub $WORK_DIR/tracker_data/pbs_run_atmos_msl.sh
 
