@@ -18,47 +18,49 @@ from affine import Affine
 from topojson import Topology
 from glob import iglob 
 
-CLIMAT_SLICE=slice('1981','2010')
+iVar='msl'
 
+files=list()
+for iFile in iglob(f'{_data_dir}/{iVar}/202[3-9]/*.nc', recursive=True):
+    files.append(iFile)
 
-for iVar in ['msl']:
-    
-    files=list()
-    for iFile in iglob(f'{_data_dir}/{iVar}/202[3-9]/*.nc', recursive=True):
-        files.append(iFile)
-    temp_ds=xr.open_mfdataset(files, chunks='auto')
-    temp_ds=temp_ds.where(temp_ds.latitude<-40, drop=True)
-    temp_ds=temp_ds.where(temp_ds.time.dt.year>=int(START_YEAR), drop=True)
-    temp_da=temp_ds[iVar].resample(time='D').mean('time')/100 #hectoPascals
-    
-    temp_da=temp_da.odc.assign_crs("epsg:4326")
-    for i in temp_da.time.values:
-        
-        loaded = temp_da.sel(time=i).load()
+temp_ds=xr.open_mfdataset(files, chunks='auto')
+temp_ds=temp_ds.where(temp_ds.latitude<-40, drop=True)
+temp_ds=temp_ds.where(temp_ds.time.dt.year>=int(START_YEAR), drop=True)
+temp_da=temp_ds[iVar].resample(time='D').mean('time')/100 #hectoPascals
 
-        lines=subpixel_contours(
-            loaded, 
-            z_values=np.arange(800,1201,10),
-            min_vertices=15, 
-            crs='epsg:4326'
-        )
+temp_da=temp_da.odc.assign_crs("epsg:4326")
+for i in temp_da.time.values:
 
-        Topology(lines.explode(index_parts=False)).to_json(
-            f'{_output_data_dir}/tracker_data/atmos/msl_lines/msl_'+str(i).split('T')[0]+'.json', 
-        )
+    loaded = temp_da.sel(time=i).load()
 
-    temp_da=temp_ds[iVar].resample(time='M').mean('time')/100 #hectoPascals
-    anoms_da=temp_da.groupby('time.month').map(lambda da:da-da.sel(time=CLIMAT_SLICE).mean('time'))
-    anoms_da=anoms_da.odc.assign_crs("epsg:4326")
-    for i in anoms_da.time:
-        loaded = anoms_da.sel(time=i).load()
-        lines=subpixel_contours(
-            loaded, 
-            z_values=np.arange(-250,251,1),
-            min_vertices=15, 
-            crs='epsg:4326'
-        )
-        Topology(lines.explode(index_parts=False)).to_json(
-            f'{_output_data_dir}tracker_data/atmos/msl_anoms_lines/msl_anom_{i.dt.year.values}_{i.dt.month.values}.json',
-        )
+    lines=subpixel_contours(
+        loaded, 
+        z_values=np.arange(800,1201,10),
+        min_vertices=15, 
+        crs='epsg:4326'
+    )
+
+    Topology(lines.explode(index_parts=False)).to_json(
+        f'{_output_data_dir}/tracker_data/atmos/msl_lines/msl_'+str(i).split('T')[0]+'.json', 
+    )
+
+temp_da=temp_ds[iVar].resample(time='M').mean('time')/100 #hectoPascals
+# CLIMAT_SLICE=slice('1981','2010')
+#climat_da=temp_da.sel(time=CLIMAT_SLICE).groupby('time.month').mean('time')
+climat_da=xr.load_dataarray(f'{_work_dir}/data/msl_climat.nc')
+
+anoms_da=temp_da.groupby('time.month')-climat_da
+anoms_da=anoms_da.odc.assign_crs("epsg:4326")
+for i in anoms_da.time:
+    loaded = anoms_da.sel(time=i).load()
+    lines=subpixel_contours(
+        loaded, 
+        z_values=np.arange(-250,251,1),
+        min_vertices=15, 
+        crs='epsg:4326'
+    )
+    Topology(lines.explode(index_parts=False)).to_json(
+        f'{_output_data_dir}tracker_data/atmos/msl_anoms_lines/msl_anom_{i.dt.year.values}_{i.dt.month.values}.json',
+    )
         

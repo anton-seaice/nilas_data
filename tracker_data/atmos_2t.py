@@ -2,7 +2,7 @@
 # Input is hourly ERA5 data as netcdf, out put is geotiff files with monthly mean and monthly anomalies
 
 # for output files, which year to start at
-START_YEAR='2022' 
+START_YEAR='2023' 
 
 #directory paths
 _work_dir='/g/data/gv90/as2285/miz/'
@@ -25,7 +25,7 @@ for iVar in [#'mn2t', #minimum temp
     '2t' #mean temp
 ]:
     files=list()
-    for iFile in iglob(f'{_data_dir}/{iVar}/202[2-3]/*.nc', recursive=True):
+    for iFile in iglob(f'{_data_dir}/{iVar}/202[3-9]/*.nc', recursive=True):
         files.append(iFile)
 
     temp_ds=xr.open_mfdataset(files) #, parallel=True)
