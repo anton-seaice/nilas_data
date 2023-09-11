@@ -3,7 +3,7 @@
 #PBS -l storage=gdata/gv90+gdata/rt52
 #PBS -M anton.steketee@aad.gov.au
 #PBS -m ae
-#PBS -q normalbw
+#PBS -q normal
 #PBS -W umask=0022
 #PBS -l ncpus=4
 #PBS -l mem=10gb

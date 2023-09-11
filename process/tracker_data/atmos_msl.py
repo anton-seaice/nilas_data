@@ -7,6 +7,7 @@ START_YEAR='2023'
 #directory paths
 _work_dir='/g/data/gv90/as2285/miz/'
 _data_dir='/g/data/rt52/era5/single-levels/reanalysis/'
+_data_dir_nrt='/g/data/rt52/era5t/single-levels/reanalysis/'
 _output_data_dir='/g/data/gv90/P6_data/'
 
 #useful py libraries
@@ -22,6 +23,8 @@ iVar='msl'
 
 files=list()
 for iFile in iglob(f'{_data_dir}/{iVar}/202[3-9]/*.nc', recursive=True):
+    files.append(iFile)
+for iFile in iglob(f'{_data_dir_nrt}/{iVar}/*/*.nc', recursive=True):
     files.append(iFile)
 
 temp_ds=xr.open_mfdataset(files, chunks='auto')
