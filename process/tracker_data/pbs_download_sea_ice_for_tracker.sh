@@ -1,7 +1,7 @@
 #!/bin/bash
 #PBS -P gv90
 #PBS -l storage=gdata/gv90
-#PBS -M anton.steketee@aad.gov.au
+#PBS -M nilas@aad.gov.au
 #PBS -m ae
 #PBS -q copyq
 #PBS -W umask=0022
@@ -9,10 +9,11 @@
 #PBS -o /g/data/gv90/P6_data/dl_logs
 #PBS -e /g/data/gv90/P6_data/dl_logs
 
-WORK_DIR=/g/data/gv90/as2285/miz/process/tracker_data
+WORK_DIR=/g/data/gv90/sc0554/miz/process/tracker_data
 DATA_DIR=/g/data/gv90/P6_data
 BREMEN_DIR=$DATA_DIR/Bremen
 NSIDC_DIR=$DATA_DIR/NSIDC/G10016_V2/daily/
+ICESAT_DIR=$DATA_DIR/NSIDC/ICESat2/ATL20/
 
 umask 0003
 
@@ -67,6 +68,13 @@ done
 
 # Park these files somewhere handy that can be accessed easily
 echo ${MONTHLY_FILES[@]} > $WORK_DIR/monthly_files.text
+
+#day=$( date +%d )
+
+#if [ "$day" -gt "10" ] && [ "$day" -lt "15" ] ;then
+#        echo 'Downloading ICESAT2 ATL20 data'
+#        wget --load-cookies ~/.urs_cookies --save-cookies ~/.urs_cookies --keep-session-cookies --no-check-certificate --auth-no-challenge=on -r --reject "index.html*" -nc -nd -np -e robots=off https://n5eil01u.ecs.nsidc.org/ATLAS/ATL20.004/ -A 'ATL20-02*h5' -P $ICESAT_DIR
+#fi
 
 # To process we need to start a different job, to move from copyq to normal, and it can then open the monthly_files.text
 qsub $WORK_DIR/pbs_run_monthly_nsidc.sh 

@@ -1,7 +1,7 @@
 #!/bin/bash
 #PBS -P gv90
 #PBS -l storage=gdata/gv90
-#PBS -M anton.steketee@aad.gov.au
+#PBS -M nilas@aad.gov.au
 #PBS -m ae
 #PBS -q normal
 #PBS -o /g/data/gv90/P6_data/dl_logs
@@ -12,7 +12,7 @@
 
 #Note that this bash script using the PBS copy queue. For transferring files from the internet. If we want to run processing subsequently well need a different job in the normal queue.
 
-WORK_DIR=/g/data/gv90/as2285/miz/process/
+WORK_DIR=/g/data/gv90/sc0554/miz/process/
 DATA_DIR=/g/data/gv90/P6_data
 
 DATE=$(date +%y%m%d)
