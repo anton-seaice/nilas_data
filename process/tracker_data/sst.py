@@ -2,7 +2,7 @@
 #usage: python3 sst.py $(cat sst_monthly_files.text)
 
 #directory paths
-_work_dir='/g/data/gv90/as2285/miz/'
+_work_dir='/g/data/gv90/sc0554/miz/'
 _data_dir='/g/data/gv90/P6_data/'
 #useful py libraries
 import xarray as xr

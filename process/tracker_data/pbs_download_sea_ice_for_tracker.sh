@@ -69,12 +69,13 @@ done
 # Park these files somewhere handy that can be accessed easily
 echo ${MONTHLY_FILES[@]} > $WORK_DIR/monthly_files.text
 
-#day=$( date +%d )
+day=$( date +%d )
 
-#if [ "$day" -gt "10" ] && [ "$day" -lt "15" ] ;then
-#        echo 'Downloading ICESAT2 ATL20 data'
-#        wget --load-cookies ~/.urs_cookies --save-cookies ~/.urs_cookies --keep-session-cookies --no-check-certificate --auth-no-challenge=on -r --reject "index.html*" -nc -nd -np -e robots=off https://n5eil01u.ecs.nsidc.org/ATLAS/ATL20.004/ -A 'ATL20-02*h5' -P $ICESAT_DIR
-#fi
+if [ "$day" -gt "10" ] && [ "$day" -lt "15" ] ;then
+       echo 'Downloading ICESAT2 ATL20 data'
+       wget --load-cookies ~/.urs_cookies --save-cookies ~/.urs_cookies --keep-session-cookies --no-check-certificate --auth-no-challenge=on -r --reject "index.html*" -nc -nd -np -e robots=off https://n5eil01u.ecs.nsidc.org/ATLAS/ATL20.004/ -A 'ATL20-02*h5' -P $ICESAT_DIR
+       qsub $WORK_DIR/pbs_run_monthly_icesat.sh 
+fi
 
 # To process we need to start a different job, to move from copyq to normal, and it can then open the monthly_files.text
 qsub $WORK_DIR/pbs_run_monthly_nsidc.sh 

@@ -5,7 +5,7 @@
 START_YEAR='2023'
 
 #directory paths
-_work_dir='/g/data/gv90/as2285/miz/'
+_work_dir='/g/data/gv90/sc0554/miz/'
 _data_dir='/g/data/rt52/era5/single-levels/reanalysis/'
 _data_dir_nrt='/g/data/rt52/era5t/single-levels/reanalysis/'
 _output_data_dir='/g/data/gv90/P6_data/'
