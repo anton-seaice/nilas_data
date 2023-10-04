@@ -30,11 +30,13 @@ class sea_ice_conc:
         
         """
         
-        climat_ds=climatology(da, climat_dates=self.climat_dates)
+        climat_ds=climatology(da, climat_dates=self.climat_dates, group=self.group)
                
         return climat_ds
     
     def calc_extent(self):
+
+        self._all_nans_da=self._all_nans_da.compute()
 
         #calculate sea ice extent
         self.extent_da=(
@@ -47,6 +49,8 @@ class sea_ice_conc:
         self.extent_climat_ds=self._climatology(self.extent_da)
 
     def calc_area(self):
+
+        self._all_nans_da=self._all_nans_da.compute()
         
         #calculate sea ice area
         self.area_da=(
@@ -87,14 +91,15 @@ class sea_ice_conc:
         
         min_max_ds.max = self._climatology(yearly_max_da)
         
-        return min_max_ds, yearly_min_ds, yearly_max_ds
-
+        return min_max_ds
+    
     def __init__(
         self, 
         conc_da,
         grid_areas,
         climat_dates=[1981,2010],
-        conc_range=[0.15,1]
+        conc_range=[0.15,1],
+        group=('time.month')
     ):
         """
         inputs:
@@ -119,6 +124,7 @@ class sea_ice_conc:
         
         self.grid_areas=grid_areas
         self.climat_dates=climat_dates
+        self.group=group
         
         dims_set=set(self.da.dims)
         dims_set.remove('time')
