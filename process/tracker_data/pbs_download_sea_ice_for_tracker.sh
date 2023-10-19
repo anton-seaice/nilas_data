@@ -12,7 +12,7 @@
 WORK_DIR=/g/data/gv90/sc0554/miz/process/tracker_data
 DATA_DIR=/g/data/gv90/P6_data
 BREMEN_DIR=$DATA_DIR/Bremen
-NSIDC_DIR=$DATA_DIR/NSIDC/G10016_V2/daily/
+NSIDC_DIR=$DATA_DIR/NSIDC/G10016_V2/south/daily/
 ICESAT_DIR=$DATA_DIR/NSIDC/ICESat2/ATL20/
 
 umask 0003
