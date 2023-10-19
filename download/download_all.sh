@@ -9,18 +9,20 @@ DATA_DIR=/g/data/gv90/P6_data
 umask 0003
 
 # NSIDC CDR Historical Data
-wget --ftp-user=anonymous -r -cN -nd ftp://sidads.colorado.edu/DATASETS/NOAA/G02202_V4/south/aggregate/ -P $DATA_DIR/NSIDC/G02202_V4/
+wget -r -nd -nc --no-check-certificate --reject "index.html*" -np -e robots=off https://noaadata.apps.nsidc.org/NOAA/G02202_V4/south/aggregate/ -P $DATA_DIR/NSIDC/G02202_V4/south/aggregate/
+
+wget -r -nd -nc --no-check-certificate --reject "index.html*" -np -e robots=off https://noaadata.apps.nsidc.org/NOAA/G02202_V4/north/aggregate/ -P $DATA_DIR/NSIDC/G02202_V4/north/aggregate/
 
 # NSIDC Supporting Info (area of pixels)
-wget --ftp-user=anonymous -r -cN -nd ftp://sidads.colorado.edu/DATASETS/seaice/polar-stereo/tools/pss25area_v3.dat -P $DATA_DIR/NSIDC/
+wget --ftp-user=anonymous -r -cN -nd -A '*.dat' ftp://sidads.colorado.edu/DATASETS/seaice/polar-stereo/tools/ -P $DATA_DIR/NSIDC/
 
 #Bremen ARTIST 6.25k
 
 for y in $(seq 2012 20$(date +%y));
 do for m in jan feb mar apr may jun jul aug sep oct nov dec;
-do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $DATA_DIR/Bremen/s6250/geotiff;
-do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/n6250/$y/$m/Antarctic/ -P $DATA_DIR/Bremen/n6250/geotiff;
-done;
+    do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $DATA_DIR/Bremen/s6250/geotiff;
+    wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/n6250/$y/$m/Arctic/ -P $DATA_DIR/Bremen/n6250/geotiff;
+    done;
 done
 
 #Bremen ARTIST 3.125k
