@@ -29,7 +29,7 @@ done
 
 for y in $(seq 2012 20$(date +%y));
 do for m in jan feb mar apr may jun jul aug sep oct nov dec;
-do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s3125/$y/$m/Antarctic3125/ -P $DATA_DIR/Bremen/s3125/;
+do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s3125/$y/$m/Antarctic3125/ -P $DATA_DIR/Bremen/s3125/geotiff;
 done;
 done
 
