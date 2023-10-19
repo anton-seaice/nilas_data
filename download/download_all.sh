@@ -15,11 +15,11 @@ wget --ftp-user=anonymous -r -cN -nd ftp://sidads.colorado.edu/DATASETS/NOAA/G02
 wget --ftp-user=anonymous -r -cN -nd ftp://sidads.colorado.edu/DATASETS/seaice/polar-stereo/tools/pss25area_v3.dat -P $DATA_DIR/NSIDC/
 
 #Bremen ARTIST 6.25k
-wget -A "5.4.nc" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/netcdf/ -P $DATA_DIR/Bremen/6km/netcdf
 
 for y in $(seq 2012 20$(date +%y));
 do for m in jan feb mar apr may jun jul aug sep oct nov dec;
-do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $DATA_DIR/Bremen/6km/geotiff;
+do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $DATA_DIR/Bremen/s6250/geotiff;
+do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/n6250/$y/$m/Antarctic/ -P $DATA_DIR/Bremen/n6250/geotiff;
 done;
 done
 
@@ -27,7 +27,7 @@ done
 
 for y in $(seq 2012 20$(date +%y));
 do for m in jan feb mar apr may jun jul aug sep oct nov dec;
-do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s3125/$y/$m/Antarctic3125/ -P $DATA_DIR/Bremen/3km/;
+do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s3125/$y/$m/Antarctic3125/ -P $DATA_DIR/Bremen/s3125/;
 done;
 done
 
