@@ -20,8 +20,8 @@ wget --ftp-user=anonymous -r -cN -nd -A '*.dat' ftp://sidads.colorado.edu/DATASE
 
 for y in $(seq 2012 20$(date +%y));
 do for m in jan feb mar apr may jun jul aug sep oct nov dec;
-    do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $DATA_DIR/Bremen/s6250/geotiff;
-    wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/n6250/$y/$m/Arctic/ -P $DATA_DIR/Bremen/n6250/geotiff;
+    do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off data.seaice.uni-bremen.de/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $DATA_DIR/Bremen/s6250/geotiff;
+    wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off data.seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/n6250/$y/$m/Arctic/ -P $DATA_DIR/Bremen/n6250/geotiff;
     done;
 done
 
