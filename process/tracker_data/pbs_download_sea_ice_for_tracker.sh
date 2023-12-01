@@ -24,14 +24,14 @@ YEARS=$(seq 2023 20$(date +%y))
 
 for y in $YEARS
 do for m in jan feb mar apr may jun jul aug sep oct nov dec
-do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $BREMEN_DIR/s6250/geotiff 
+do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off data.seaice.uni-bremen.de/amsr2/asi_daygrid_swath/s6250/$y/$m/Antarctic/ -P $BREMEN_DIR/s6250/geotiff 
 done
 done
 
 #Bremen ARTIST 3.125k
 for y in $YEARS;
 do for m in jan feb mar apr may jun jul aug sep oct nov dec;
-do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off seaice.uni-bremen.de/data/amsr2/asi_daygrid_swath/s3125/$y/$m/Antarctic3125/ -P $BREMEN_DIR/s3125/geotiff;
+do wget -A "5.4.tif" -r -nc -nd -np -nH -nv -e robots=off data.seaice.uni-bremen.de/amsr2/asi_daygrid_swath/s3125/$y/$m/Antarctic3125/ -P $BREMEN_DIR/s3125/geotiff;
 done;
 done
 
