@@ -4,12 +4,6 @@
 # for output files, which year to start at
 START_YEAR='2023'
 
-#directory paths
-_work_dir='/g/data/gv90/sc0554/miz/'
-_data_dir='/g/data/rt52/era5/single-levels/reanalysis/'
-_data_dir_nrt='/g/data/rt52/era5t/single-levels/reanalysis/'
-_output_data_dir='/g/data/gv90/P6_data/'
-
 #useful py libraries
 import xarray as xr
 import numpy as np
@@ -19,18 +13,35 @@ from affine import Affine
 from topojson import Topology
 from glob import iglob 
 
+import os 
+
+#directory paths
+_work_dir=f'/g/data/gv90/{os.environ["USER"]}/miz/'
+_data_dir='/g/data/rt52/era5/single-levels/reanalysis/'
+_data_dir_nrt='/g/data/rt52/era5t/single-levels/reanalysis/'
+_output_data_dir='/g/data/gv90/P6_data/'
+
 iVar='msl'
+
+files=list()
+for iFile in iglob(f'{_data_dir_nrt}/{iVar}/*/*.nc', recursive=True):
+    files.append(iFile)
+
+nrt_monthly_ds = xr.open_mfdataset(files).resample(time='ME').mean('time')
 
 files=list()
 for iFile in iglob(f'{_data_dir}/{iVar}/202[3-9]/*.nc', recursive=True):
     files.append(iFile)
-for iFile in iglob(f'{_data_dir_nrt}/{iVar}/*/*.nc', recursive=True):
-    files.append(iFile)
 
-temp_ds=xr.open_mfdataset(files, chunks='auto')
+temp_ds=xr.merge([
+    xr.open_mfdataset(files),
+    nrt_monthly_ds
+    ],compat='override' #preference 1st dataset
+)
+
 temp_ds=temp_ds.where(temp_ds.latitude<-40, drop=True)
 temp_ds=temp_ds.where(temp_ds.time.dt.year>=int(START_YEAR), drop=True)
-temp_da=temp_ds[iVar].resample(time='D').mean('time')/100 #hectoPascals
+temp_da=temp_ds['msl'].resample(time='D').mean('time')/100 #hectoPascals
 
 temp_da=temp_da.odc.assign_crs("epsg:4326")
 for i in temp_da.time.values:

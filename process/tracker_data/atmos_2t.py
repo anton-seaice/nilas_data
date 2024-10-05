@@ -2,10 +2,12 @@
 # Input is hourly ERA5 data as netcdf, out put is geotiff files with monthly mean and monthly anomalies
 
 # for output files, which year to start at
-START_YEAR='2023' 
+# START_YEAR='2024' 
+
+import os 
 
 #directory paths
-_work_dir='/g/data/gv90/sc0554/miz/'
+_work_dir=f'/g/data/gv90/{os.environ["USER"]}/miz/'
 _data_dir='/g/data/rt52/era5/single-levels/reanalysis/'
 _data_dir_nrt='/g/data/rt52/era5t/single-levels/reanalysis/'
 _output_data_dir='/g/data/gv90/P6_data/'
@@ -20,26 +22,32 @@ from glob import iglob
 import sys
 sys.path.append(_work_dir)
 from utils.climat import climatology
-
 iVar='2t'
+
+files=list()
+for iFile in iglob(f'{_data_dir_nrt}/{iVar}/*/*.nc', recursive=True):
+    files.append(iFile)
+
+nrt_monthly_ds = xr.open_mfdataset(files).resample(time='ME').mean('time')
 
 files=list()
 for iFile in iglob(f'{_data_dir}/{iVar}/202[3-9]/*.nc', recursive=True):
     files.append(iFile)
-for iFile in iglob(f'{_data_dir_nrt}/{iVar}/*/*.nc', recursive=True):
-    files.append(iFile)
 
-temp_ds=xr.open_mfdataset(files) #, parallel=True)
+temp_ds=xr.merge([
+    xr.open_mfdataset(files).resample(time='ME').mean('time'),
+    nrt_monthly_ds
+    ],compat='override' #preference 1st dataset
+)
 
 temp_ds=temp_ds.where(temp_ds.latitude<-35, drop=True)
 
-temp_da=temp_ds['t2m'].resample(time='M').mean('time')-273.15
+temp_da=temp_ds['t2m']-273.15
 
 ## Map GeoBoxes
 temp_da=temp_da.odc.assign_crs("epsg:4326")
 
 src_geobox=temp_da.odc.geobox
-
 map_geobox = odc.geo.geobox.GeoBox.from_bbox(
     [-4500000,-4500000,4500000,4500000],
     "epsg:3976",
@@ -48,7 +56,7 @@ map_geobox = odc.geo.geobox.GeoBox.from_bbox(
 newNd = np.ndarray([900,900])
 
 ## Map Files
-datetimes_xr=temp_da.sel(time=slice(START_YEAR,'2050')).time
+datetimes_xr=temp_da.time
 
 for iTime in datetimes_xr:
     odc.geo.xr.rio_reproject(
