@@ -31,16 +31,19 @@ for iFile in iglob(f'{_data_dir_nrt}/{iVar}/*/*.nc', recursive=True):
 nrt_monthly_ds = xr.open_mfdataset(files).resample(time='ME').mean('time')
 
 files=list()
-for iFile in iglob(f'{_data_dir}/{iVar}/202[3-9]/*.nc', recursive=True):
+for iFile in iglob(f'{_data_dir}/{iVar}/202[4-9]/*.nc', recursive=True):
     files.append(iFile)
 
-temp_ds=xr.merge([
-    xr.open_mfdataset(files).resample(time='ME').mean('time'),
-    nrt_monthly_ds
-    ],compat='override' #preference 1st dataset
-)
+temp_ds=xr.open_mfdataset(files, chunks={'time':24}).resample(time='ME').mean('time')
 
-temp_ds=temp_ds.where(temp_ds.latitude<-35, drop=True)
+dates_no_overlap = list(set(nrt_monthly_ds.time.values)-set(temp_ds.time.values))
+
+temp_ds=xr.concat([
+    temp_ds,
+    nrt_monthly_ds.sel(time=dates_no_overlap)
+], dim='time')
+
+temp_ds=temp_ds.chunk({'time':1}).where(temp_ds.latitude<-35, drop=True)
 
 temp_da=temp_ds['t2m']-273.15
 
@@ -75,8 +78,8 @@ for iTime in datetimes_xr:
     write_cog(
         new_xr, 
             f'{_output_data_dir}tracker_data/atmos/{iVar}_cog/{iVar}_{iTime.dt.year.values}_{iTime.dt.month.values}.tiff', 
-                overwrite=True
-                )
+            overwrite=True
+        )
 
 #Monthly anoms
 # climat_temp_ds=climatology(temp_da)

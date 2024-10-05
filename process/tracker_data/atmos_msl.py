@@ -27,19 +27,22 @@ files=list()
 for iFile in iglob(f'{_data_dir_nrt}/{iVar}/*/*.nc', recursive=True):
     files.append(iFile)
 
-nrt_monthly_ds = xr.open_mfdataset(files).resample(time='ME').mean('time')
+nrt_monthly_ds = xr.open_mfdataset(files)
 
 files=list()
 for iFile in iglob(f'{_data_dir}/{iVar}/202[3-9]/*.nc', recursive=True):
     files.append(iFile)
 
-temp_ds=xr.merge([
-    xr.open_mfdataset(files),
-    nrt_monthly_ds
-    ],compat='override' #preference 1st dataset
-)
+temp_ds=xr.open_mfdataset(files, chunks={'time':24})
 
-temp_ds=temp_ds.where(temp_ds.latitude<-40, drop=True)
+dates_no_overlap = list(set(nrt_monthly_ds.time.values)-set(temp_ds.time.values))
+
+temp_ds=xr.concat([
+    temp_ds,
+    nrt_monthly_ds.sel(time=dates_no_overlap)
+], dim='time')
+
+temp_ds=temp_ds.chunk({'time':1}).where(temp_ds.latitude<-40, drop=True)
 temp_ds=temp_ds.where(temp_ds.time.dt.year>=int(START_YEAR), drop=True)
 temp_da=temp_ds['msl'].resample(time='D').mean('time')/100 #hectoPascals
 
